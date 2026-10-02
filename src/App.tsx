@@ -15,13 +15,13 @@ import {
   Stamp,
   UploadCloud,
   Video,
-  ExternalLink,
 } from 'lucide-react'
 
 type RequestType = 'branch' | 'loan' | 'notary'
 type NotaryType = 'affidavit' | 'loan' | 'poa'
-type StatusTab = 'status' | 'docs' | 'notary' | 'support'
-type NotaryTab = 'overview' | 'verify' | 'session' | 'receipt'
+type MainTab = 'home' | 'docs' | 'notary' | 'help'
+type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
+type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
 
 const requests = {
   branch: {
@@ -34,7 +34,7 @@ const requests = {
     stepNumber: 3,
     nextAction: 'Stay nearby. The service desk is almost ready for you.',
     primaryAction: 'Text me when ready',
-    actionTab: 'support',
+    actionTarget: 'help',
     helper: 'Keep your phone nearby and stay in the branch lobby.',
     documentNote: 'Photo ID and member number are ready.',
     owner: 'Member services desk',
@@ -50,7 +50,7 @@ const requests = {
     stepNumber: 3,
     nextAction: 'Upload the latest paystub so review can continue.',
     primaryAction: 'Upload paystub',
-    actionTab: 'docs',
+    actionTarget: 'docs',
     helper: 'PDF, JPG, and PNG files are accepted.',
     documentNote: 'Government ID and application are matched. Latest paystub is missing.',
     owner: 'Credit review team',
@@ -66,7 +66,7 @@ const requests = {
     stepNumber: 3,
     nextAction: 'Choose a notary slot and upload the document before the session.',
     primaryAction: 'Schedule notary',
-    actionTab: 'notary',
+    actionTarget: 'notary',
     helper: 'A government ID, camera, and quiet space are required.',
     documentNote: 'ID verification passed. Document upload is still needed.',
     owner: 'Remote notary team',
@@ -82,7 +82,7 @@ const requests = {
   stepNumber: number
   nextAction: string
   primaryAction: string
-  actionTab: StatusTab
+  actionTarget: StatusTarget
   helper: string
   documentNote: string
   owner: string
@@ -135,70 +135,37 @@ const notaryFlows = {
   readiness: string
 }>
 
-const statusNav = [
-  { tab: 'status', label: 'Home', icon: Home },
+const bottomNav = [
+  { tab: 'home', label: 'Home', icon: Home },
   { tab: 'docs', label: 'Docs', icon: FileText },
   { tab: 'notary', label: 'Notary', icon: Stamp },
-  { tab: 'support', label: 'Help', icon: Headphones },
-] as const
-
-const notaryNav = [
-  { tab: 'overview', label: 'Home', icon: Home },
-  { tab: 'verify', label: 'Verify', icon: ShieldCheck },
-  { tab: 'session', label: 'Session', icon: Video },
-  { tab: 'receipt', label: 'Receipt', icon: ReceiptText },
+  { tab: 'help', label: 'Help', icon: Headphones },
 ] as const
 
 function App() {
+  const [activeTab, setActiveTab] = useState<MainTab>('home')
   const [requestType, setRequestType] = useState<RequestType>('branch')
   const [requestId, setRequestId] = useState(requests.branch.id)
-  const [statusTab, setStatusTab] = useState<StatusTab>('status')
   const [notaryType, setNotaryType] = useState<NotaryType>('affidavit')
-  const [notaryTab, setNotaryTab] = useState<NotaryTab>('overview')
+  const [notaryStep, setNotaryStep] = useState<NotaryStep>('overview')
   const [slot, setSlot] = useState('10:30 AM')
   const [sessionText, setSessionText] = useState(notaryFlows.affidavit.session)
   const [notaryProgress, setNotaryProgress] = useState(notaryFlows.affidavit.progress)
   const [completedChecks, setCompletedChecks] = useState<number[]>([0, 1])
   const [branchReminder, setBranchReminder] = useState(false)
+
   const request = requests[requestType]
   const flow = notaryFlows[notaryType]
 
-  const statusPanels = {
-    status: {
-      icon: Bell,
-      title: 'Recommended next step',
-      body: branchReminder && requestType === 'branch' ? 'Reminder is on. HFCU will text you when the desk is ready.' : request.nextAction,
-      action: branchReminder && requestType === 'branch' ? 'View help options' : request.primaryAction,
-      target: branchReminder && requestType === 'branch' ? 'support' : request.actionTab,
-    },
-    docs: {
-      icon: FileCheck2,
-      title: 'Document readiness',
-      body: request.documentNote,
-      action: 'Return to home',
-      target: 'status',
-    },
-    notary: {
-      icon: Stamp,
-      title: 'Remote notary path',
-      body: requestType === 'notary' ? request.nextAction : 'Start a remote notary request without calling the branch.',
-      action: requestType === 'notary' ? 'Review status' : 'Use notary flow',
-      target: 'status',
-    },
-    support: {
-      icon: Headphones,
-      title: 'Help options',
-      body: `${request.owner} can chat, call back, or create a branch handoff code.`,
-      action: 'Return to home',
-      target: 'status',
-    },
-  } satisfies Record<StatusTab, {
-    icon: typeof Bell
-    title: string
-    body: string
-    action: string
-    target: StatusTab
-  }>
+  const recommendedBody = branchReminder && requestType === 'branch'
+    ? 'Reminder is on. HFCU will text you when the desk is ready.'
+    : request.nextAction
+  const recommendedAction = branchReminder && requestType === 'branch'
+    ? 'View help options'
+    : request.primaryAction
+  const recommendedTarget = branchReminder && requestType === 'branch'
+    ? 'help'
+    : request.actionTarget
 
   const notaryPanels = {
     overview: {
@@ -206,42 +173,34 @@ function App() {
       title: 'Readiness summary',
       body: flow.panel,
       action: `Reserve ${slot}`,
-      target: 'session',
     },
     verify: {
       icon: ShieldCheck,
       title: 'Identity check',
       body: 'Government ID, selfie match, signer consent, and camera readiness are grouped before the live session.',
       action: 'Continue to session',
-      target: 'session',
     },
     session: {
       icon: CalendarClock,
       title: 'Selected session',
       body: sessionText,
       action: `Confirm ${slot}`,
-      target: 'receipt',
     },
     receipt: {
       icon: ReceiptText,
       title: 'After notarization',
       body: 'Download the notarized file, view audit details, and send a copy to HFCU staff.',
       action: 'Back to home',
-      target: 'overview',
     },
-  } satisfies Record<NotaryTab, {
+  } satisfies Record<NotaryStep, {
     icon: typeof ClipboardList
     title: string
     body: string
     action: string
-    target: NotaryTab
   }>
 
-  const activeStatusPanel = statusPanels[statusTab]
-  const ActiveStatusIcon = activeStatusPanel.icon
-  const activeNotaryPanel = notaryPanels[notaryTab]
+  const activeNotaryPanel = notaryPanels[notaryStep]
   const ActiveNotaryIcon = activeNotaryPanel.icon
-
   const notaryChecks = [
     { icon: ShieldCheck, title: 'Verify identity', body: 'Government ID verified' },
     { icon: UploadCloud, title: 'Upload document', body: flow.upload },
@@ -253,7 +212,6 @@ function App() {
   function chooseRequest(type: RequestType) {
     setRequestType(type)
     setRequestId(requests[type].id)
-    setStatusTab('status')
     setBranchReminder(false)
   }
 
@@ -267,280 +225,287 @@ function App() {
     setSessionText(notaryFlows[type].session)
     setNotaryProgress(notaryFlows[type].progress)
     setSlot('10:30 AM')
-    setNotaryTab('overview')
+    setNotaryStep('overview')
     setCompletedChecks([0, 1])
+  }
+
+  function runRecommendedAction() {
+    if (requestType === 'branch' && !branchReminder) {
+      setBranchReminder(true)
+      return
+    }
+    setActiveTab(recommendedTarget)
   }
 
   function reserveSlot(nextSlot = slot) {
     setSlot(nextSlot)
     setSessionText(`Session confirmed for ${nextSlot}`)
     setNotaryProgress(92)
-    setNotaryTab('session')
+    setNotaryStep('session')
     setCompletedChecks((current) => current.includes(2) ? current : [...current, 2])
   }
 
-  function runStatusAction() {
-    if (statusTab === 'status' && requestType === 'branch' && !branchReminder) {
-      setBranchReminder(true)
-      return
-    }
-    if (statusTab === 'notary' && requestType !== 'notary') {
-      chooseRequest('notary')
-      return
-    }
-    setStatusTab(activeStatusPanel.target)
-  }
-
   function runNotaryAction() {
-    if (notaryTab === 'overview') {
+    if (notaryStep === 'overview') {
       reserveSlot()
       return
     }
-    if (notaryTab === 'session') {
+    if (notaryStep === 'verify') {
+      setNotaryStep('session')
+      return
+    }
+    if (notaryStep === 'session') {
       setSessionText(`Session confirmed for ${slot}`)
       setNotaryProgress(100)
-      setNotaryTab('receipt')
+      setNotaryStep('receipt')
       setCompletedChecks([0, 1, 2, 3])
       return
     }
-    setNotaryTab(activeNotaryPanel.target)
+    setNotaryStep('overview')
   }
 
   return (
-    <>
-      <header className="topbar">
-        <div className="topbar-brand">
-          <p className="eyebrow">HFCU Reengineering</p>
-          <h1>Member Service App MVP</h1>
-        </div>
-        <a className="repo-link" href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">
-          <ExternalLink aria-hidden="true" size={18} />
-          GitHub repo
-        </a>
-      </header>
-
-      <main>
-        <section className="intro">
-          <div>
-            <h2>One clear path per request</h2>
-            <p>The MVP now behaves like a guided service home: members see their current step, the one thing to do next, and the fastest way to get help.</p>
-          </div>
-          <div className="metric-card">
-            <span>MVP focus</span>
-            <strong>Less guessing, fewer status calls</strong>
-          </div>
-        </section>
-
-        <section className="prototype-grid" aria-label="HFCU MVP prototypes">
-          <article className="prototype-block">
-            <div className="prototype-copy">
-              <span className="label">Member app</span>
-              <h2>Status checker</h2>
-              <p>Members can find a request, understand where it stands, and act on the next useful step without decoding internal queue language.</p>
-              <div className="metric-row">
-                <div><strong>31%</strong><span>target call deflection</span></div>
-                <div><strong>1 tap</strong><span>to next action</span></div>
-                <div><strong>4 steps</strong><span>visible journey</span></div>
+    <div className="app-shell">
+      <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
+        <main className="screen">
+          {activeTab === 'home' && (
+            <section className="scroll-area">
+              <div className="app-header">
+                <p>HFCU</p>
+                <span>9:41</span>
               </div>
-            </div>
 
-            <div className="phone" role="application" aria-label="HFCU waiting status checker prototype">
-              <div className="phone-top"><span>9:41</span><span>HFCU</span></div>
-              <div className="app-screen">
-                <div className="hero">
-                  <span>Hi, Maya</span>
-                  <h3>{request.title}</h3>
-                  <p>{request.label}</p>
-                </div>
+              <section className="hero-card">
+                <span>Hi, Maya</span>
+                <h1>{request.title}</h1>
+                <p>{request.label}</p>
+              </section>
 
-                <div className="status-search">
-                  <label htmlFor="requestId">Find a request</label>
-                  <div>
-                    <input
-                      id="requestId"
-                      type="text"
-                      value={requestId}
-                      onChange={(event) => setRequestId(event.target.value)}
-                      onKeyDown={(event) => { if (event.key === 'Enter') lookupRequest() }}
-                    />
-                    <button id="lookup" type="button" onClick={lookupRequest} aria-label="Check request">
-                      <Search aria-hidden="true" size={18} />
-                      Check
-                    </button>
-                  </div>
-                </div>
-
-                <div className="section-heading">
-                  <span>Recent requests</span>
-                </div>
-                <div className="chip-grid">
-                  {(['branch', 'loan', 'notary'] as const).map((type) => (
-                    <button
-                      key={type}
-                      className={`sample-request${requestType === type ? ' is-active' : ''}`}
-                      type="button"
-                      onClick={() => chooseRequest(type)}
-                    >
-                      {type === 'branch' ? <Landmark aria-hidden="true" size={16} /> : type === 'loan' ? <ClipboardList aria-hidden="true" size={16} /> : <Stamp aria-hidden="true" size={16} />}
-                      {type === 'branch' ? 'Branch visit' : type === 'loan' ? 'Loan review' : 'Remote notary'}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="request-card">
-                  <div>
-                    <span>{request.etaLabel}</span>
-                    <strong>{request.eta}</strong>
-                  </div>
-                  <b>Step {request.stepNumber} of 4</b>
-                </div>
-
-                <div className="progress" aria-label={`${request.progress}% complete`}><i style={{ width: `${request.progress}%` }} /></div>
-
-                <div className="action-panel">
-                  <div className="panel-icon"><ActiveStatusIcon aria-hidden="true" size={18} /></div>
-                  <div>
-                    <span>{activeStatusPanel.title}</span>
-                    <strong>{activeStatusPanel.body}</strong>
-                    <p>{statusTab === 'status' ? request.helper : `Request owner: ${request.owner}`}</p>
-                  </div>
-                  <button className="primary-action" type="button" onClick={runStatusAction}>
-                    {activeStatusPanel.action}
+              <section className="status-search">
+                <label htmlFor="requestId">Find a request</label>
+                <div>
+                  <input
+                    id="requestId"
+                    type="text"
+                    value={requestId}
+                    onChange={(event) => setRequestId(event.target.value)}
+                    onKeyDown={(event) => { if (event.key === 'Enter') lookupRequest() }}
+                  />
+                  <button id="lookup" type="button" onClick={lookupRequest} aria-label="Check request">
+                    <Search aria-hidden="true" size={18} />
+                    Check
                   </button>
                 </div>
+              </section>
 
-                <div className="timeline" aria-label="Request progress">
-                  {request.steps.map((step, index) => {
-                    const isComplete = index + 1 < request.stepNumber
-                    const isCurrent = index + 1 === request.stepNumber
-                    return (
-                      <div key={step} className={`${isComplete ? 'is-complete' : ''}${isCurrent ? ' is-current' : ''}`}>
-                        <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={14} /> : index + 1}</span>
-                        <p><strong>{step}</strong><small>{isCurrent ? 'Now' : isComplete ? 'Done' : 'Next'}</small></p>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <nav className="bottom-nav" aria-label="Status checker sections">
-                {statusNav.map(({ tab, label, icon: Icon }) => (
-                  <button key={tab} className={`nav-item${statusTab === tab ? ' is-active' : ''}`} type="button" onClick={() => setStatusTab(tab)}>
-                    <Icon aria-hidden="true" size={18} />
-                    {label}
+              <div className="section-label">Recent requests</div>
+              <section className="chip-grid">
+                {(['branch', 'loan', 'notary'] as const).map((type) => (
+                  <button
+                    key={type}
+                    className={`chip${requestType === type ? ' is-active' : ''}`}
+                    type="button"
+                    onClick={() => chooseRequest(type)}
+                  >
+                    {type === 'branch' ? <Landmark aria-hidden="true" size={16} /> : type === 'loan' ? <ClipboardList aria-hidden="true" size={16} /> : <Stamp aria-hidden="true" size={16} />}
+                    {type === 'branch' ? 'Branch visit' : type === 'loan' ? 'Loan review' : 'Remote notary'}
                   </button>
                 ))}
-              </nav>
-            </div>
-          </article>
+              </section>
 
-          <article className="prototype-block alternate">
-            <div className="prototype-copy">
-              <span className="label">HFCU app module</span>
-              <h2>Remote notarization</h2>
-              <p>The notary module now shows readiness, session timing, and completion status as one guided path instead of separate task cards.</p>
-              <div className="metric-row">
-                <div><strong>64%</strong><span>target digital completion</span></div>
-                <div><strong>12 min</strong><span>member prep time</span></div>
-                <div><strong>1 slot</strong><span>selected clearly</span></div>
-              </div>
-            </div>
+              <section className="request-card">
+                <div>
+                  <span>{request.etaLabel}</span>
+                  <strong>{request.eta}</strong>
+                </div>
+                <b>Step {request.stepNumber} of 4</b>
+              </section>
 
-            <div className="phone notary-phone" role="application" aria-label="HFCU remote notarization prototype">
-              <div className="phone-top"><span>9:41</span><span>HFCU Notary</span></div>
-              <div className="app-screen">
-                <div className="hero notary-hero">
-                  <span>Remote notarization</span>
-                  <h3>{flow.title}</h3>
-                  <p>{flow.eligibility}</p>
-                </div>
-
-                <div className="section-heading">
-                  <span>Document type</span>
-                </div>
-                <div className="chip-grid">
-                  {(['affidavit', 'loan', 'poa'] as const).map((type) => (
-                    <button
-                      key={type}
-                      className={`notary-type${notaryType === type ? ' is-active' : ''}`}
-                      type="button"
-                      onClick={() => chooseNotary(type)}
-                    >
-                      <FileText aria-hidden="true" size={16} />
-                      {type === 'affidavit' ? 'Affidavit' : type === 'loan' ? 'Loan doc' : 'Power of attorney'}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="request-card notary-card">
-                  <div>
-                    <span>{flow.etaLabel}</span>
-                    <strong>{flow.eta}</strong>
-                  </div>
-                  <b>{flow.progress}% ready</b>
-                </div>
-
-                <div className="progress"><i style={{ width: `${notaryProgress}%` }} /></div>
-
-                <div className="action-panel notary-action">
-                  <div className="panel-icon"><ActiveNotaryIcon aria-hidden="true" size={18} /></div>
-                  <div>
-                    <span>{activeNotaryPanel.title}</span>
-                    <strong>{activeNotaryPanel.body}</strong>
-                    <p>{flow.readiness}</p>
-                  </div>
-                  <button className="primary-action" type="button" onClick={runNotaryAction}>
-                    {activeNotaryPanel.action}
-                  </button>
-                </div>
-
-                <div className="checklist">
-                  {notaryChecks.map((check, index) => {
-                    const CheckIcon = check.icon
-                    const isComplete = completedChecks.includes(index)
-                    const isCurrent = currentNotaryStep === index
-                    return (
-                      <button
-                        key={check.title}
-                        className={`notary-check${isComplete ? ' is-complete' : ''}${isCurrent ? ' is-current' : ''}`}
-                        type="button"
-                        aria-pressed={isComplete}
-                        onClick={() => setCompletedChecks((current) => current.includes(index) ? current : [...current, index])}
-                      >
-                        <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={18} /> : <CheckIcon aria-hidden="true" size={18} />}</span>
-                        <p><strong>{check.title}</strong><small>{check.body}</small></p>
-                      </button>
-                    )
-                  })}
-                </div>
-
-                <div className="section-heading slot-heading">
-                  <span>Available today</span>
-                  <b>{slot}</b>
-                </div>
-                <div className="chip-grid">
-                  {['10:30 AM', '1:15 PM', '4:45 PM'].map((time) => (
-                    <button key={time} className={`notary-slot${slot === time ? ' is-active' : ''}`} type="button" onClick={() => reserveSlot(time)}>
-                      <CalendarClock aria-hidden="true" size={16} />
-                      {time}
-                    </button>
-                  ))}
-                </div>
+              <div className="progress" aria-label={`${request.progress}% complete`}>
+                <i style={{ width: `${request.progress}%` }} />
               </div>
 
-              <nav className="bottom-nav" aria-label="Notarization sections">
-                {notaryNav.map(({ tab, label, icon: Icon }) => (
-                  <button key={tab} className={`nav-item${notaryTab === tab ? ' is-active' : ''}`} type="button" onClick={() => setNotaryTab(tab)}>
-                    <Icon aria-hidden="true" size={18} />
-                    {label}
+              <section className="action-card">
+                <div className="panel-icon"><Bell aria-hidden="true" size={18} /></div>
+                <div>
+                  <span>Recommended next step</span>
+                  <strong>{recommendedBody}</strong>
+                  <p>{request.helper}</p>
+                </div>
+                <button className="primary-action" type="button" onClick={runRecommendedAction}>
+                  {recommendedAction}
+                </button>
+              </section>
+
+              <section className="timeline" aria-label="Request progress">
+                {request.steps.map((step, index) => {
+                  const isComplete = index + 1 < request.stepNumber
+                  const isCurrent = index + 1 === request.stepNumber
+                  return (
+                    <div key={step} className={`${isComplete ? 'is-complete' : ''}${isCurrent ? ' is-current' : ''}`}>
+                      <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={14} /> : index + 1}</span>
+                      <p><strong>{step}</strong><small>{isCurrent ? 'Now' : isComplete ? 'Done' : 'Next'}</small></p>
+                    </div>
+                  )
+                })}
+              </section>
+            </section>
+          )}
+
+          {activeTab === 'docs' && (
+            <section className="scroll-area">
+              <div className="screen-title">
+                <p>Documents</p>
+                <h1>Ready items and missing steps</h1>
+              </div>
+              <section className="action-card">
+                <div className="panel-icon blue"><FileCheck2 aria-hidden="true" size={18} /></div>
+                <div>
+                  <span>{request.title}</span>
+                  <strong>{request.documentNote}</strong>
+                  <p>{request.helper}</p>
+                </div>
+                <button className="primary-action" type="button" onClick={() => setActiveTab('home')}>Back to status</button>
+              </section>
+              <section className="document-list">
+                {[
+                  ['Government ID', 'Ready'],
+                  ['Member number', 'Ready'],
+                  [requestType === 'loan' ? 'Latest paystub' : 'Service form', requestType === 'loan' ? 'Needed' : 'Ready'],
+                  [requestType === 'notary' ? 'Notary document' : 'Optional income document', requestType === 'notary' ? 'Needed' : 'Optional'],
+                ].map(([name, state]) => (
+                  <div key={name} className={state === 'Needed' ? 'needs-attention' : ''}>
+                    <FileText aria-hidden="true" size={18} />
+                    <p><strong>{name}</strong><small>{state}</small></p>
+                  </div>
+                ))}
+              </section>
+            </section>
+          )}
+
+          {activeTab === 'notary' && (
+            <section className="scroll-area notary-screen">
+              <section className="hero-card notary-hero">
+                <span>Remote notarization</span>
+                <h1>{flow.title}</h1>
+                <p>{flow.eligibility}</p>
+              </section>
+
+              <div className="section-label">Document type</div>
+              <section className="chip-grid">
+                {(['affidavit', 'loan', 'poa'] as const).map((type) => (
+                  <button
+                    key={type}
+                    className={`chip${notaryType === type ? ' is-active' : ''}`}
+                    type="button"
+                    onClick={() => chooseNotary(type)}
+                  >
+                    <FileText aria-hidden="true" size={16} />
+                    {type === 'affidavit' ? 'Affidavit' : type === 'loan' ? 'Loan doc' : 'Power of attorney'}
                   </button>
                 ))}
-              </nav>
-            </div>
-          </article>
-        </section>
-      </main>
-    </>
+              </section>
+
+              <section className="request-card">
+                <div>
+                  <span>{flow.etaLabel}</span>
+                  <strong>{flow.eta}</strong>
+                </div>
+                <b>{notaryProgress}% ready</b>
+              </section>
+
+              <div className="progress blue-progress"><i style={{ width: `${notaryProgress}%` }} /></div>
+
+              <section className="action-card notary-action">
+                <div className="panel-icon blue"><ActiveNotaryIcon aria-hidden="true" size={18} /></div>
+                <div>
+                  <span>{activeNotaryPanel.title}</span>
+                  <strong>{activeNotaryPanel.body}</strong>
+                  <p>{flow.readiness}</p>
+                </div>
+                <button className="primary-action blue-action" type="button" onClick={runNotaryAction}>
+                  {activeNotaryPanel.action}
+                </button>
+              </section>
+
+              <section className="checklist">
+                {notaryChecks.map((check, index) => {
+                  const CheckIcon = check.icon
+                  const isComplete = completedChecks.includes(index)
+                  const isCurrent = currentNotaryStep === index
+                  return (
+                    <button
+                      key={check.title}
+                      className={`notary-check${isComplete ? ' is-complete' : ''}${isCurrent ? ' is-current' : ''}`}
+                      type="button"
+                      aria-pressed={isComplete}
+                      onClick={() => setCompletedChecks((current) => current.includes(index) ? current : [...current, index])}
+                    >
+                      <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={18} /> : <CheckIcon aria-hidden="true" size={18} />}</span>
+                      <p><strong>{check.title}</strong><small>{check.body}</small></p>
+                    </button>
+                  )
+                })}
+              </section>
+
+              <div className="section-label with-value"><span>Available today</span><b>{slot}</b></div>
+              <section className="chip-grid">
+                {['10:30 AM', '1:15 PM', '4:45 PM'].map((time) => (
+                  <button key={time} className={`chip${slot === time ? ' is-active' : ''}`} type="button" onClick={() => reserveSlot(time)}>
+                    <CalendarClock aria-hidden="true" size={16} />
+                    {time}
+                  </button>
+                ))}
+              </section>
+            </section>
+          )}
+
+          {activeTab === 'help' && (
+            <section className="scroll-area">
+              <div className="screen-title">
+                <p>Support</p>
+                <h1>Get help without starting over</h1>
+              </div>
+              <section className="support-card">
+                <Headphones aria-hidden="true" size={22} />
+                <div>
+                  <strong>Chat with {request.owner}</strong>
+                  <p>Share your request ID and continue from the current step.</p>
+                </div>
+              </section>
+              <section className="support-card">
+                <Bell aria-hidden="true" size={22} />
+                <div>
+                  <strong>Request a callback</strong>
+                  <p>HFCU can call when a specialist is available.</p>
+                </div>
+              </section>
+              <section className="support-card">
+                <ShieldCheck aria-hidden="true" size={22} />
+                <div>
+                  <strong>Branch handoff code</strong>
+                  <p>Use {request.id} at the desk so staff can find the request instantly.</p>
+                </div>
+              </section>
+            </section>
+          )}
+        </main>
+
+        <nav className="bottom-nav" aria-label="HFCU app sections">
+          {bottomNav.map(({ tab, label, icon: Icon }) => (
+            <button
+              key={tab}
+              className={`bottom-nav-item${activeTab === tab ? ' active' : ''}`}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+            >
+              <Icon aria-hidden="true" size={22} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+      </div>
+    </div>
   )
 }
 
