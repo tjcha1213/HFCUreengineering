@@ -1,15 +1,23 @@
 :root {
-  --ink: #172026;
-  --muted: #5c6870;
-  --line: #d8e0e4;
-  --paper: #f7f9fa;
+  --ink: #2f3433;
+  --muted: #74676a;
+  --line: #eadde0;
+  --paper: #fff7f6;
   --white: #ffffff;
-  --teal: #147c72;
-  --blue: #315f91;
-  --gold: #bc8b2d;
-  --soft-teal: #eef8f6;
-  --soft-blue: #f1f6fb;
-  --soft-gold: #fff8e8;
+  --crimson: #822433;
+  --crimson-bright: #8c2246;
+  --coral: #d11f43;
+  --coral-bright: #f04d5f;
+  --mint: #39e5cd;
+  --mint-ink: #08746a;
+  --plum: #8d2c8a;
+  --indigo: #29389d;
+  --teal: var(--crimson);
+  --blue: var(--plum);
+  --gold: var(--coral);
+  --soft-teal: #fbebef;
+  --soft-blue: #f7ebf8;
+  --soft-gold: #fff0f2;
   --bottom-nav-height: 72px;
 }
 
@@ -31,7 +39,7 @@ body,
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
-  background: var(--paper);
+  background: #f8eef1;
   font-size: 14px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
@@ -88,7 +96,9 @@ svg {
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  background: #f4f7f8;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 247, 246, 0) 26%),
+    var(--paper);
 }
 
 @media (min-width: 480px) {
@@ -96,8 +106,7 @@ svg {
     align-items: center;
     padding: 24px;
     background:
-      radial-gradient(circle at 20% 10%, rgba(20, 124, 114, 0.16), transparent 32%),
-      linear-gradient(135deg, #f7fbfa 0%, #edf4f8 55%, #f7f9fa 100%);
+      linear-gradient(135deg, #f8eef1 0%, #fff7f6 42%, #f3e6eb 100%);
   }
 
   .phone-container {
@@ -105,8 +114,8 @@ svg {
     height: min(844px, calc(100dvh - 48px));
     border-radius: 28px;
     box-shadow:
-      0 24px 60px rgba(23, 32, 38, 0.16),
-      0 8px 24px rgba(23, 32, 38, 0.08);
+      0 24px 60px rgba(47, 52, 51, 0.18),
+      0 8px 24px rgba(130, 36, 51, 0.12);
   }
 }
 
@@ -175,11 +184,16 @@ svg {
   padding: 18px;
   border-radius: 16px;
   color: var(--white);
-  background: linear-gradient(135deg, #174c78, #147c72);
+  background:
+    linear-gradient(135deg, rgba(57, 229, 205, 0.16), transparent 36%),
+    linear-gradient(135deg, #6f1f2e 0%, var(--crimson) 46%, var(--coral) 100%);
+  box-shadow: 0 16px 32px rgba(130, 36, 51, 0.22);
 }
 
 .notary-hero {
-  background: linear-gradient(135deg, #315f91, #bc8b2d);
+  background:
+    linear-gradient(135deg, rgba(57, 229, 205, 0.18), transparent 38%),
+    linear-gradient(135deg, #3b4544 0%, var(--crimson-bright) 52%, var(--plum) 100%);
 }
 
 .hero-card span {
@@ -226,6 +240,7 @@ svg {
   border-radius: 12px;
   background: var(--white);
   font-weight: 850;
+  box-shadow: 0 6px 18px rgba(130, 36, 51, 0.04);
 }
 
 .status-search button {
@@ -237,7 +252,7 @@ svg {
   padding: 0 12px;
   border-radius: 12px;
   color: var(--white);
-  background: var(--blue);
+  background: var(--crimson);
   font-weight: 850;
 }
 
@@ -249,7 +264,7 @@ svg {
 }
 
 .section-label.with-value b {
-  color: var(--teal);
+  color: var(--crimson);
   font-size: 0.82rem;
 }
 
@@ -278,14 +293,14 @@ svg {
 }
 
 .chip.is-active {
-  color: var(--teal);
-  border-color: rgba(20, 124, 114, 0.36);
+  color: var(--crimson);
+  border-color: rgba(130, 36, 51, 0.32);
   background: var(--soft-teal);
 }
 
 .notary-screen .chip.is-active {
-  color: var(--blue);
-  border-color: rgba(49, 95, 145, 0.36);
+  color: var(--plum);
+  border-color: rgba(141, 44, 138, 0.32);
   background: var(--soft-blue);
 }
 
@@ -298,6 +313,7 @@ svg {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--white);
+  box-shadow: 0 10px 24px rgba(130, 36, 51, 0.05);
 }
 
 .request-card div {
@@ -314,33 +330,33 @@ svg {
   flex: 0 0 auto;
   padding: 8px 10px;
   border-radius: 999px;
-  color: var(--blue);
-  background: var(--soft-blue);
+  color: var(--crimson);
+  background: var(--soft-teal);
   font-size: 0.82rem;
 }
 
 .notary-screen .request-card b {
-  color: var(--gold);
-  background: var(--soft-gold);
+  color: var(--plum);
+  background: var(--soft-blue);
 }
 
 .progress {
   height: 8px;
   overflow: hidden;
   border-radius: 999px;
-  background: #dfe8ec;
+  background: #f0dfe3;
 }
 
 .progress i {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--teal);
+  background: linear-gradient(90deg, var(--crimson), var(--coral-bright));
   transition: width 180ms ease;
 }
 
 .blue-progress i {
-  background: var(--blue);
+  background: linear-gradient(90deg, var(--plum), var(--mint));
 }
 
 .action-card {
@@ -351,12 +367,13 @@ svg {
   border: 1px solid var(--line);
   border-left: 4px solid var(--gold);
   border-radius: 14px;
-  background: #fffdf7;
+  background: #fffafb;
+  box-shadow: 0 10px 24px rgba(130, 36, 51, 0.05);
 }
 
 .notary-action {
   border-left-color: var(--blue);
-  background: #fbfdff;
+  background: #fffbff;
 }
 
 .panel-icon {
@@ -370,7 +387,7 @@ svg {
 }
 
 .panel-icon.blue {
-  background: var(--blue);
+  background: var(--plum);
 }
 
 .action-card > div:not(.panel-icon) {
@@ -398,12 +415,12 @@ svg {
   width: 100%;
   border-radius: 12px;
   color: var(--white);
-  background: var(--teal);
+  background: var(--crimson);
   font-weight: 850;
 }
 
 .blue-action {
-  background: var(--blue);
+  background: var(--plum);
 }
 
 .timeline,
@@ -415,6 +432,7 @@ svg {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--white);
+  box-shadow: 0 10px 24px rgba(130, 36, 51, 0.04);
 }
 
 .timeline div,
@@ -430,7 +448,7 @@ svg {
   place-items: center;
   width: 24px;
   height: 24px;
-  border: 2px solid #b9c6cc;
+  border: 2px solid #d9c6cc;
   border-radius: 999px;
   color: var(--muted);
   background: var(--white);
@@ -467,13 +485,13 @@ svg {
 .timeline .is-complete span,
 .timeline .is-current span {
   color: var(--white);
-  border-color: var(--teal);
-  background: var(--teal);
+  border-color: var(--crimson);
+  background: var(--crimson);
 }
 
 .timeline .is-current p strong,
 .checklist .is-current p strong {
-  color: var(--teal);
+  color: var(--crimson);
 }
 
 .document-list div {
@@ -483,7 +501,7 @@ svg {
 }
 
 .document-list svg {
-  color: var(--teal);
+  color: var(--crimson);
 }
 
 .document-list .needs-attention {
@@ -514,17 +532,17 @@ svg {
   height: 32px;
   border-radius: 10px;
   color: var(--muted);
-  background: #edf2f4;
+  background: #f4e8ec;
 }
 
 .notary-check.is-complete > span,
 .notary-check.is-current > span {
   color: var(--white);
-  background: var(--teal);
+  background: var(--crimson);
 }
 
 .notary-check.is-current {
-  border-color: rgba(188, 139, 45, 0.34);
+  border-color: rgba(209, 31, 67, 0.3);
   background: var(--soft-gold);
 }
 
@@ -537,10 +555,11 @@ svg {
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--white);
+  box-shadow: 0 10px 24px rgba(130, 36, 51, 0.04);
 }
 
 .support-card svg {
-  color: var(--teal);
+  color: var(--crimson);
 }
 
 .support-card div {
@@ -563,9 +582,9 @@ svg {
   display: flex;
   align-items: center;
   padding: 4px 6px 6px;
-  border-top: 1px solid #edf1f3;
+  border-top: 1px solid #efe0e4;
   background: var(--white);
-  box-shadow: 0 -4px 20px rgba(23, 32, 38, 0.05);
+  box-shadow: 0 -4px 20px rgba(130, 36, 51, 0.06);
   position: relative;
   z-index: 5;
 }
@@ -580,14 +599,14 @@ svg {
   gap: 3px;
   min-height: 58px;
   border-radius: 14px;
-  color: #87939a;
+  color: #96888b;
   font-size: 0.68rem;
   font-weight: 800;
   line-height: 1;
 }
 
 .bottom-nav-item.active {
-  color: var(--teal);
+  color: var(--crimson);
   background: var(--soft-teal);
 }
 
