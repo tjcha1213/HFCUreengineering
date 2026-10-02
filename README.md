@@ -4,6 +4,8 @@ React and Vite prototype for HFCU member service flows.
 
 ## MVP modules
 
+- Cambridge branch reengineering landing page with branch system rationale.
+- Hypothetical branch map for member flow, staff routing, notary work, and back-office support.
 - Waiting status checker: request lookup, queue stage, ETA, documents, and support tabs.
 - Remote notarization: document type selection, eligibility, verification checklist, session scheduling, and receipt flow.
 

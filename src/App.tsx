@@ -265,8 +265,130 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
-      <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
+    <div className="site-shell">
+      <header className="site-header">
+        <div>
+          <p>HFCU Reengineering</p>
+          <h1>Cambridge Branch Service Redesign</h1>
+        </div>
+        <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
+      </header>
+
+      <main className="site-main">
+        <section className="landing" aria-label="Cambridge branch reengineering overview">
+          <div className="landing-copy">
+            <span className="page-label">Cambridge branch reengineering</span>
+            <h2>Designing a clearer branch-to-digital service system</h2>
+            <p>
+              The Cambridge HFCU branch needs a redesigned operating flow that reduces member uncertainty,
+              separates simple status checks from staff-intensive work, and routes notarization and document
+              services into a cleaner digital handoff.
+            </p>
+            <div className="action-row">
+              <a className="site-action primary-site-action" href="#mvp">View phone MVP</a>
+              <a className="site-action secondary-site-action" href="#branch-system">See branch system map</a>
+            </div>
+          </div>
+
+          <div className="landing-insights" aria-label="Why reengineering is needed">
+            <div>
+              <strong>Queue opacity</strong>
+              <span>Members often need staff help just to understand wait status, next step, or missing documents.</span>
+            </div>
+            <div>
+              <strong>Service mixing</strong>
+              <span>Routine questions, notarization prep, lending review, and branch visits compete for the same attention.</span>
+            </div>
+            <div>
+              <strong>Digital handoff gap</strong>
+              <span>The app can absorb status, readiness, scheduling, and document guidance before a member reaches staff.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="prototype-objective">
+          <div>
+            <h2>Prototype Objective</h2>
+            <p>Reduce service uncertainty by giving Cambridge branch members a clear app-based path for request status, document readiness, remote notarization, and support escalation.</p>
+          </div>
+          <div>
+            <span>Target outcome</span>
+            <strong>Fewer status calls, clearer digital completion</strong>
+          </div>
+        </section>
+
+        <section id="branch-system" className="branch-system" aria-label="Hypothetical Cambridge branch system map">
+          <div className="section-heading">
+            <span className="page-label">Hypothetical branch map</span>
+            <h2>Cambridge branch as a service system</h2>
+            <p>This placeholder map shows how members, staff, documents, and digital check-ins could move through the branch. Actual dimensions and floor plan details can be added later.</p>
+          </div>
+
+          <div className="map-layout">
+            <div className="branch-map" role="img" aria-label="Hypothetical map rendering of the HFCU Cambridge branch">
+              <div className="map-zone entry-zone">
+                <strong>Entrance</strong>
+                <span>Member arrival and QR check-in</span>
+              </div>
+              <div className="map-zone waiting-zone">
+                <strong>Waiting area</strong>
+                <span>Status board and app prompts</span>
+              </div>
+              <div className="map-zone teller-zone">
+                <strong>Teller pods</strong>
+                <span>Fast transactions and simple service</span>
+              </div>
+              <div className="map-zone consult-zone">
+                <strong>Consult rooms</strong>
+                <span>Loans, escalations, sensitive requests</span>
+              </div>
+              <div className="map-zone notary-zone">
+                <strong>Notary desk</strong>
+                <span>Document check, witness, remote session support</span>
+              </div>
+              <div className="map-zone staff-zone">
+                <strong>Back office</strong>
+                <span>Verification, approvals, callbacks</span>
+              </div>
+              <svg className="map-arrows" viewBox="0 0 1000 520" aria-hidden="true">
+                <defs>
+                  <marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                    <path d="M0 0 L10 5 L0 10z" />
+                  </marker>
+                </defs>
+                <path d="M120 440 C170 350 220 290 300 250" markerEnd="url(#mapArrow)" />
+                <path d="M380 220 C470 190 560 190 650 220" markerEnd="url(#mapArrow)" />
+                <path d="M384 280 C520 345 645 350 780 310" markerEnd="url(#mapArrow)" />
+                <path d="M810 250 C765 175 720 130 660 90" markerEnd="url(#mapArrow)" />
+                <path d="M510 95 C420 125 350 160 300 220" markerEnd="url(#mapArrow)" />
+              </svg>
+            </div>
+
+            <div className="system-notes">
+              <div>
+                <strong>System goal</strong>
+                <p>Route status checks and readiness questions into the app before the member reaches staff.</p>
+              </div>
+              <div>
+                <strong>Branch bottleneck</strong>
+                <p>Specialist capacity is consumed when members arrive without clear queue, document, or appointment status.</p>
+              </div>
+              <div>
+                <strong>Reengineering move</strong>
+                <p>Use digital check-in, status visibility, and notarization prep to split low-complexity work from staff-intensive service.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="mvp" className="mvp-stage" aria-label="HFCU phone MVP">
+          <div className="section-heading">
+            <span className="page-label">Phone screen MVP</span>
+            <h2>Member-facing app prototype</h2>
+            <p>The phone screen shows the proposed app layer for status checking, document readiness, remote notarization, and support routing.</p>
+          </div>
+          <div className="app-shell">
+            <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
         <main className="screen">
           {activeTab === 'home' && (
             <section className="scroll-area">
@@ -504,8 +626,11 @@ function App() {
             </button>
           ))}
         </nav>
+          </div>
+          </div>
+        </section>
+      </main>
       </div>
-    </div>
   )
 }
 
