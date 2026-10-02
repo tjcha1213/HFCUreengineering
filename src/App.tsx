@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import {
   Bell,
   CalendarClock,
@@ -156,6 +156,7 @@ function App() {
 
   const request = requests[requestType]
   const flow = notaryFlows[notaryType]
+  const timelineProgress = ((request.stepNumber - 1) / (request.steps.length - 1)) * 100
 
   const recommendedBody = branchReminder && requestType === 'branch'
     ? 'Reminder is on. HFCU will text you when the desk is ready.'
@@ -435,17 +436,44 @@ function App() {
                 ))}
               </section>
 
-              <section className="request-card">
-                <div>
+              <section className="status-summary">
+                <div className="time-panel">
                   <span>{request.etaLabel}</span>
                   <strong>{request.eta}</strong>
+                  <small>{request.label}</small>
                 </div>
-                <b>Step {request.stepNumber} of 4</b>
+                <div className="step-panel" aria-label={`Step ${request.stepNumber} of ${request.steps.length}`}>
+                  <span>Current step</span>
+                  <strong>{request.stepNumber}</strong>
+                  <small>of {request.steps.length}</small>
+                </div>
               </section>
 
-              <div className="progress" aria-label={`${request.progress}% complete`}>
-                <i style={{ width: `${request.progress}%` }} />
-              </div>
+              <section
+                className="timeline"
+                aria-label="Request progress timeline"
+                style={{ '--timeline-progress': `${timelineProgress}%` } as CSSProperties}
+              >
+                <div className="timeline-heading">
+                  <span>Task timeline</span>
+                  <b>{request.progress}% complete</b>
+                </div>
+                <div className="timeline-axis" aria-hidden="true">
+                  <i />
+                </div>
+                <div className="timeline-steps">
+                {request.steps.map((step, index) => {
+                  const isComplete = index + 1 < request.stepNumber
+                  const isCurrent = index + 1 === request.stepNumber
+                  return (
+                    <div key={step} className={`${isComplete ? 'is-complete' : ''}${isCurrent ? ' is-current' : ''}`}>
+                      <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={14} /> : index + 1}</span>
+                      <p><strong>{step}</strong><small>{isCurrent ? 'Now' : isComplete ? 'Done' : 'Next'}</small></p>
+                    </div>
+                  )
+                })}
+                </div>
+              </section>
 
               <section className="action-card">
                 <div className="panel-icon"><Bell aria-hidden="true" size={18} /></div>
@@ -457,19 +485,6 @@ function App() {
                 <button className="primary-action" type="button" onClick={runRecommendedAction}>
                   {recommendedAction}
                 </button>
-              </section>
-
-              <section className="timeline" aria-label="Request progress">
-                {request.steps.map((step, index) => {
-                  const isComplete = index + 1 < request.stepNumber
-                  const isCurrent = index + 1 === request.stepNumber
-                  return (
-                    <div key={step} className={`${isComplete ? 'is-complete' : ''}${isCurrent ? ' is-current' : ''}`}>
-                      <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={14} /> : index + 1}</span>
-                      <p><strong>{step}</strong><small>{isCurrent ? 'Now' : isComplete ? 'Done' : 'Next'}</small></p>
-                    </div>
-                  )
-                })}
               </section>
             </section>
           )}
