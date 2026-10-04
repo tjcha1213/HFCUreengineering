@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import {
   Bell,
   CalendarClock,
@@ -22,6 +22,7 @@ type NotaryType = 'affidavit' | 'loan' | 'poa'
 type MainTab = 'home' | 'docs' | 'notary' | 'help'
 type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
+type SitePage = 'strategy' | 'mvp' | 'architecture'
 
 const requests = {
   branch: {
@@ -142,7 +143,16 @@ const bottomNav = [
   { tab: 'help', label: 'Help', icon: Headphones },
 ] as const
 
+function getSitePage(): SitePage {
+  const hash = window.location.hash.replace(/^#\/?/, '')
+
+  if (hash === 'mvp') return 'mvp'
+  if (hash === 'branch-architecture') return 'architecture'
+  return 'strategy'
+}
+
 function App() {
+  const [sitePage, setSitePage] = useState<SitePage>(getSitePage)
   const [activeTab, setActiveTab] = useState<MainTab>('home')
   const [requestType, setRequestType] = useState<RequestType>('branch')
   const [requestId, setRequestId] = useState(requests.branch.id)
@@ -153,6 +163,14 @@ function App() {
   const [notaryProgress, setNotaryProgress] = useState(notaryFlows.affidavit.progress)
   const [completedChecks, setCompletedChecks] = useState<number[]>([0, 1])
   const [branchReminder, setBranchReminder] = useState(false)
+
+  useEffect(() => {
+    const syncPage = () => setSitePage(getSitePage())
+
+    syncPage()
+    window.addEventListener('hashchange', syncPage)
+    return () => window.removeEventListener('hashchange', syncPage)
+  }, [])
 
   const request = requests[requestType]
   const flow = notaryFlows[notaryType]
@@ -272,10 +290,17 @@ function App() {
           <p>HFCU Reengineering</p>
           <h1>Cambridge Branch Service Redesign</h1>
         </div>
-        <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
+        <nav className="site-nav" aria-label="Project pages">
+          <a className={sitePage === 'strategy' ? 'is-active' : ''} href="#/">Recommendations</a>
+          <a className={sitePage === 'mvp' ? 'is-active' : ''} href="#/mvp">Phone MVP</a>
+          <a className={sitePage === 'architecture' ? 'is-active' : ''} href="#/branch-architecture">Branch architecture</a>
+          <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
+        </nav>
       </header>
 
       <main className="site-main">
+        {sitePage === 'strategy' && (
+          <>
         <section className="landing" aria-label="Cambridge branch reengineering overview">
           <div className="landing-copy">
             <span className="page-label">Cambridge branch reengineering</span>
@@ -286,8 +311,8 @@ function App() {
               services into a cleaner digital handoff.
             </p>
             <div className="action-row">
-              <a className="site-action primary-site-action" href="#mvp">View phone MVP</a>
-              <a className="site-action secondary-site-action" href="#branch-system">See branch system map</a>
+              <a className="site-action primary-site-action" href="#/mvp">View phone MVP</a>
+              <a className="site-action secondary-site-action" href="#/branch-architecture">See branch architecture</a>
             </div>
           </div>
 
@@ -317,12 +342,48 @@ function App() {
             <strong>Fewer status calls, clearer digital completion</strong>
           </div>
         </section>
+        <section className="recommendations" aria-label="Analytical reasoning and recommendations">
+          <div className="section-heading">
+            <span className="page-label">Analytical reasoning</span>
+            <h2>Pain point resolutions</h2>
+            <p>The reengineering proposal separates avoidable uncertainty from work that genuinely needs staff attention.</p>
+          </div>
+          <div className="recommendation-grid">
+            <article>
+              <strong>1. Make queue status self-service</strong>
+              <p>Members should be able to see wait stage, ETA, and next action without asking branch staff. This reduces front-desk interruption and lowers perceived wait time.</p>
+            </article>
+            <article>
+              <strong>2. Move document readiness before arrival</strong>
+              <p>Missing documents should surface before the member reaches a specialist. The app should show exactly what is missing and whether a visit can proceed.</p>
+            </article>
+            <article>
+              <strong>3. Split simple service from specialist work</strong>
+              <p>Fast teller transactions, loan review, notarization, and escalations should have separate routing so members do not wait in one ambiguous queue.</p>
+            </article>
+            <article>
+              <strong>4. Add remote notarization as a guided workflow</strong>
+              <p>Identity verification, document upload, appointment selection, and receipt delivery can be handled as a structured digital sequence.</p>
+            </article>
+            <article>
+              <strong>5. Use the branch as a visibility system</strong>
+              <p>Interior cues, queue displays, and desk zoning should help members understand where to go and why they are waiting.</p>
+            </article>
+            <article>
+              <strong>6. Preserve human support for exceptions</strong>
+              <p>The app should not replace staff. It should reduce repetitive clarification so staff can focus on complex cases and relationship-building.</p>
+            </article>
+          </div>
+        </section>
+          </>
+        )}
 
+        {sitePage === 'architecture' && (
         <section id="branch-system" className="branch-system" aria-label="Hypothetical Cambridge branch system map">
           <div className="section-heading">
-            <span className="page-label">Hypothetical branch map</span>
-            <h2>Cambridge branch as a service system</h2>
-            <p>This placeholder map shows how members, staff, documents, and digital check-ins could move through the branch. Actual dimensions and floor plan details can be added later.</p>
+            <span className="page-label">Branch architecture recommendation</span>
+            <h2>Interior changes for queue visibility and customer experience</h2>
+            <p>This page separates the physical branch recommendations from the phone MVP. The goal is to make queues, service zones, and staff handoffs more visible to members as soon as they enter.</p>
           </div>
 
           <div className="map-layout">
@@ -380,13 +441,33 @@ function App() {
               </div>
             </div>
           </div>
+          <div className="architecture-recommendations">
+            <article>
+              <strong>Entry check-in wall</strong>
+              <p>Add a QR/self-service check-in point near entry so members can identify visit purpose before joining a queue.</p>
+            </article>
+            <article>
+              <strong>Visible queue board</strong>
+              <p>Show anonymized ticket status, expected wait, and service desk readiness from the waiting area.</p>
+            </article>
+            <article>
+              <strong>Service zoning</strong>
+              <p>Separate teller, specialist, lending, and notary paths with clear sightlines and signage.</p>
+            </article>
+            <article>
+              <strong>Document prep counter</strong>
+              <p>Create a small prep zone where members can scan, upload, or review missing documents before meeting staff.</p>
+            </article>
+          </div>
         </section>
+        )}
 
+        {sitePage === 'mvp' && (
         <section id="mvp" className="mvp-stage" aria-label="HFCU phone MVP">
           <div className="section-heading">
             <span className="page-label">Phone screen MVP</span>
             <h2>Member-facing app prototype</h2>
-            <p>The phone screen shows the proposed app layer for status checking, document readiness, remote notarization, and support routing.</p>
+            <p>This is the standalone phone-screen MVP. It is separated from the reasoning page so stakeholders can test the flow directly.</p>
           </div>
           <div className="app-shell">
             <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
@@ -644,6 +725,7 @@ function App() {
           </div>
           </div>
         </section>
+        )}
       </main>
       </div>
   )

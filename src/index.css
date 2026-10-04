@@ -115,7 +115,15 @@ svg {
   letter-spacing: 0;
 }
 
-.site-header a {
+.site-nav {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.site-nav a {
   flex: 0 0 auto;
   display: inline-flex;
   min-height: 42px;
@@ -127,6 +135,11 @@ svg {
   background: var(--soft-teal);
   font-weight: 850;
   text-decoration: none;
+}
+
+.site-nav a.is-active {
+  color: var(--white);
+  background: var(--crimson);
 }
 
 .site-main {
@@ -250,6 +263,41 @@ svg {
   margin-bottom: 18px;
 }
 
+.recommendations {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  padding: 20px;
+}
+
+.recommendation-grid,
+.architecture-recommendations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.recommendation-grid article,
+.architecture-recommendations article {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffbfb;
+}
+
+.recommendation-grid strong,
+.architecture-recommendations strong {
+  color: var(--crimson);
+}
+
+.recommendation-grid p,
+.architecture-recommendations p {
+  color: var(--muted);
+  line-height: 1.48;
+}
+
 .section-heading {
   display: grid;
   gap: 6px;
@@ -271,6 +319,10 @@ svg {
   grid-template-columns: minmax(320px, 1fr) minmax(240px, 0.36fr);
   gap: 16px;
   align-items: stretch;
+}
+
+.architecture-recommendations {
+  margin-top: 16px;
 }
 
 .branch-map {
@@ -1087,12 +1139,18 @@ svg {
   .site-header,
   .landing,
   .prototype-objective,
-  .map-layout {
+  .map-layout,
+  .recommendation-grid,
+  .architecture-recommendations {
     grid-template-columns: 1fr;
   }
 
   .site-header {
     display: grid;
+  }
+
+  .site-nav {
+    justify-content: start;
   }
 
   .branch-map {
