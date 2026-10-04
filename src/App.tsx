@@ -292,7 +292,7 @@ function App() {
         </div>
         <nav className="site-nav" aria-label="Project pages">
           <a className={sitePage === 'strategy' ? 'is-active' : ''} href="#/">Recommendations</a>
-          <a className={sitePage === 'mvp' ? 'is-active' : ''} href="#/mvp">Phone MVP</a>
+          <a className={sitePage === 'mvp' ? 'is-active' : ''} href="#/mvp">MVP</a>
           <a className={sitePage === 'architecture' ? 'is-active' : ''} href="#/branch-architecture">Branch architecture</a>
           <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
         </nav>
@@ -311,7 +311,7 @@ function App() {
               services into a cleaner digital handoff.
             </p>
             <div className="action-row">
-              <a className="site-action primary-site-action" href="#/mvp">View phone MVP</a>
+              <a className="site-action primary-site-action" href="#/mvp">View MVP</a>
               <a className="site-action secondary-site-action" href="#/branch-architecture">See branch architecture</a>
             </div>
           </div>
@@ -383,7 +383,7 @@ function App() {
           <div className="section-heading">
             <span className="page-label">Branch architecture recommendation</span>
             <h2>Interior changes for queue visibility and customer experience</h2>
-            <p>This page separates the physical branch recommendations from the phone MVP. The goal is to make queues, service zones, and staff handoffs more visible to members as soon as they enter.</p>
+            <p>This page separates the physical branch recommendations from the MVP. The goal is to make queues, service zones, and staff handoffs more visible to members as soon as they enter.</p>
           </div>
 
           <div className="map-layout">
@@ -463,11 +463,11 @@ function App() {
         )}
 
         {sitePage === 'mvp' && (
-        <section id="mvp" className="mvp-stage" aria-label="HFCU phone MVP">
+        <section id="mvp" className="mvp-stage" aria-label="HFCU MVP">
           <div className="section-heading">
-            <span className="page-label">Phone screen MVP</span>
+            <span className="page-label">MVP</span>
             <h2>Member-facing app prototype</h2>
-            <p>This is the standalone phone-screen MVP. It is separated from the reasoning page so stakeholders can test the flow directly.</p>
+            <p>This standalone MVP is separated from the reasoning page so stakeholders can test the mobile flow directly.</p>
           </div>
           <div className="app-shell">
             <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
