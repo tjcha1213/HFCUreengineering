@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Stamp,
   UploadCloud,
+  Play,
   PlayCircle,
   Video,
 } from 'lucide-react'
@@ -24,6 +25,7 @@ type MainTab = 'home' | 'docs' | 'notary' | 'help'
 type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
 type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'methodology'
+type ArchitectureRecommendationId = 'lounge' | 'surround' | 'atm' | 'queue'
 
 type AppendixVideo = {
   title: string
@@ -31,6 +33,17 @@ type AppendixVideo = {
   videoPath: string
   thumbnail: string
   focus: string
+}
+
+type ArchitectureRecommendation = {
+  id: ArchitectureRecommendationId
+  title: string
+  body: string
+  overlays: {
+    label: string
+    className: string
+    style: CSSProperties
+  }[]
 }
 
 const requests = {
@@ -192,6 +205,97 @@ const appendixVideos: AppendixVideo[] = [
   },
 ]
 
+const architectureRecommendations: ArchitectureRecommendation[] = [
+  {
+    id: 'lounge',
+    title: 'Recenter the lounge',
+    body: 'Move the waiting area closer to the service core so customers are visible to tellers and office staff, and staff are more visible to waiting customers.',
+    overlays: [
+      {
+        label: 'Proposed visible lounge core',
+        className: 'lounge-overlay',
+        style: { left: '36%', top: '40%', width: '25%', height: '19%' },
+      },
+      {
+        label: 'Current waiting area feels isolated',
+        className: 'current-overlay',
+        style: { left: '7%', top: '61%', width: '28%', height: '18%' },
+      },
+    ],
+  },
+  {
+    id: 'surround',
+    title: 'Surround waiting with service points',
+    body: 'Arrange teller stands and offices around the lounge rather than leaving the lounge isolated by the street-facing windows.',
+    overlays: [
+      {
+        label: 'Teller visibility edge',
+        className: 'service-overlay',
+        style: { left: '35%', top: '25%', width: '34%', height: '18%' },
+      },
+      {
+        label: 'Office visibility edge',
+        className: 'service-overlay',
+        style: { left: '12%', top: '18%', width: '18%', height: '35%' },
+      },
+      {
+        label: 'Office visibility edge',
+        className: 'service-overlay',
+        style: { left: '72%', top: '18%', width: '18%', height: '37%' },
+      },
+      {
+        label: '',
+        className: 'visibility-arrow arrow-from-left',
+        style: { left: '33%', top: '51%', width: '11%', height: '5%' },
+      },
+      {
+        label: '',
+        className: 'visibility-arrow arrow-from-right',
+        style: { left: '56%', top: '51%', width: '11%', height: '5%' },
+      },
+      {
+        label: '',
+        className: 'visibility-arrow arrow-from-top',
+        style: { left: '48%', top: '36%', width: '6%', height: '11%' },
+      },
+    ],
+  },
+  {
+    id: 'atm',
+    title: 'Separate ATM flow from entry',
+    body: 'The ATM can create a line that acts as a barrier to entry and exit. Separating the ATM from the entrance preserves a clearer arrival path.',
+    overlays: [
+      {
+        label: 'ATM queue pressure',
+        className: 'atm-overlay',
+        style: { left: '51%', top: '61%', width: '12%', height: '18%' },
+      },
+      {
+        label: 'Keep entry and exit clear',
+        className: 'entry-overlay',
+        style: { left: '44%', top: '78%', width: '16%', height: '12%' },
+      },
+    ],
+  },
+  {
+    id: 'queue',
+    title: 'Visible queue board',
+    body: 'Pair the recentered lounge with an anonymized queue board so waiting members can see expected wait, status, and next service step.',
+    overlays: [
+      {
+        label: 'Queue status board',
+        className: 'queue-overlay',
+        style: { left: '41%', top: '34%', width: '28%', height: '13%' },
+      },
+      {
+        label: 'Sightline to waiting area',
+        className: 'sightline-overlay',
+        style: { left: '32%', top: '43%', width: '38%', height: '25%' },
+      },
+    ],
+  },
+]
+
 function getSitePage(): SitePage {
   const hash = window.location.hash.replace(/^#\/?/, '')
 
@@ -214,6 +318,8 @@ function App() {
   const [notaryProgress, setNotaryProgress] = useState(notaryFlows.affidavit.progress)
   const [completedChecks, setCompletedChecks] = useState<number[]>([0, 1])
   const [branchReminder, setBranchReminder] = useState(false)
+  const [activeArchitecture, setActiveArchitecture] = useState<ArchitectureRecommendationId | null>(null)
+  const [showLoungeModal, setShowLoungeModal] = useState(false)
 
   useEffect(() => {
     const syncPage = () => setSitePage(getSitePage())
@@ -225,6 +331,10 @@ function App() {
 
   const request = requests[requestType]
   const flow = notaryFlows[notaryType]
+  const activeArchitectureRecommendation = architectureRecommendations.find((item) => item.id === activeArchitecture)
+  const atmQueueVideoPath = `${assetBase}architecture/atm-queue-pressure.mp4`
+  const atmQueueThumbPath = `${assetBase}architecture/atm-queue-thumb.jpg`
+  const competitorWaitingAreaPath = `${assetBase}architecture/csb-waiting-area.png`
   const timelineProgress = ((request.stepNumber - 1) / (request.steps.length - 1)) * 100
 
   const recommendedBody = branchReminder && requestType === 'branch'
@@ -598,44 +708,30 @@ function App() {
           </div>
 
           <div className="map-layout">
-            <div className="branch-map" role="img" aria-label="Hypothetical map rendering of the HFCU Cambridge branch">
-              <div className="map-zone entry-zone">
-                <strong>Entrance</strong>
-                <span>Member arrival and QR check-in</span>
+            <figure className="branch-floor-plan">
+              <div className="floor-plan-stage">
+                <img
+                  src={`${assetBase}architecture/hfcu-floor-plan.png`}
+                  alt="Conceptual customer-facing first-floor plan for the Harvard Federal Credit Union Harvard Square branch"
+                />
+                <div className="floor-plan-overlays" aria-live="polite">
+                  {activeArchitectureRecommendation?.overlays.map((overlay, index) => (
+                    <span
+                      key={`${activeArchitectureRecommendation.id}-${overlay.label}-${overlay.className}-${index}`}
+                      className={`floor-plan-overlay ${overlay.className}`}
+                      style={overlay.style}
+                    >
+                      {overlay.className.includes('visibility-arrow') ? (
+                        <svg className="visibility-arrow-svg" viewBox="0 0 120 44" aria-hidden="true">
+                          <path d="M4 16H76V6L116 22L76 38V28H4Z" />
+                        </svg>
+                      ) : overlay.label}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="map-zone waiting-zone">
-                <strong>Waiting area</strong>
-                <span>Status board and app prompts</span>
-              </div>
-              <div className="map-zone teller-zone">
-                <strong>Teller pods</strong>
-                <span>Fast transactions and simple service</span>
-              </div>
-              <div className="map-zone consult-zone">
-                <strong>Consult rooms</strong>
-                <span>Loans, escalations, sensitive requests</span>
-              </div>
-              <div className="map-zone notary-zone">
-                <strong>Notary desk</strong>
-                <span>Document check, witness, remote session support</span>
-              </div>
-              <div className="map-zone staff-zone">
-                <strong>Back office</strong>
-                <span>Verification, approvals, callbacks</span>
-              </div>
-              <svg className="map-arrows" viewBox="0 0 1000 520" aria-hidden="true">
-                <defs>
-                  <marker id="mapArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                    <path d="M0 0 L10 5 L0 10z" />
-                  </marker>
-                </defs>
-                <path d="M120 440 C170 350 220 290 300 250" markerEnd="url(#mapArrow)" />
-                <path d="M380 220 C470 190 560 190 650 220" markerEnd="url(#mapArrow)" />
-                <path d="M384 280 C520 345 645 350 780 310" markerEnd="url(#mapArrow)" />
-                <path d="M810 250 C765 175 720 130 660 90" markerEnd="url(#mapArrow)" />
-                <path d="M510 95 C420 125 350 160 300 220" markerEnd="url(#mapArrow)" />
-              </svg>
-            </div>
+              <figcaption>Conceptual customer-facing first floor plan for 104 Mount Auburn Street.</figcaption>
+            </figure>
 
             <div className="system-notes">
               <div>
@@ -644,33 +740,69 @@ function App() {
               </div>
               <div>
                 <strong>Branch bottleneck</strong>
-                <p>Specialist capacity is consumed when members arrive without clear queue, document, or appointment status.</p>
+                <p>The current lounge is pushed toward the street-facing edge, which weakens mutual visibility between waiting members, tellers, and office staff.</p>
               </div>
               <div>
                 <strong>Reengineering move</strong>
-                <p>Use digital check-in, status visibility, and notarization prep to split low-complexity work from staff-intensive service.</p>
+                <p>Recenter waiting activity so tellers and offices surround the lounge area, while ATM traffic is separated from the main entrance path.</p>
               </div>
             </div>
           </div>
           <div className="architecture-recommendations">
-            <article>
-              <strong>Entry check-in wall</strong>
-              <p>Add a QR/self-service check-in point near entry so members can identify visit purpose before joining a queue.</p>
-            </article>
-            <article>
-              <strong>Visible queue board</strong>
-              <p>Show anonymized ticket status, expected wait, and service desk readiness from the waiting area.</p>
-            </article>
-            <article>
-              <strong>Service zoning</strong>
-              <p>Separate teller, specialist, lending, and notary paths with clear sightlines and signage.</p>
-            </article>
-            <article>
-              <strong>Document prep counter</strong>
-              <p>Create a small prep zone where members can scan, upload, or review missing documents before meeting staff.</p>
-            </article>
+            {architectureRecommendations.map((item) => (
+              <button
+                key={item.id}
+                className={`architecture-card${activeArchitecture === item.id ? ' is-active' : ''}`}
+                type="button"
+                onClick={() => setActiveArchitecture((current) => current === item.id ? null : item.id)}
+                aria-pressed={activeArchitecture === item.id}
+              >
+                <strong>{item.title}</strong>
+                <p>{item.body}</p>
+              </button>
+            ))}
           </div>
+          {activeArchitecture === 'atm' && (
+            <aside className="architecture-video-evidence" aria-label="ATM queue pressure video evidence">
+              <a className="atm-video-thumbnail" href={atmQueueVideoPath} target="_blank" rel="noreferrer" aria-label="Play ATM queue pressure footage">
+                <img src={atmQueueThumbPath} alt="" loading="lazy" />
+                <span><Play aria-hidden="true" size={24} fill="currentColor" /></span>
+              </a>
+              <div>
+                <span>Supporting observation</span>
+                <strong>ATM queue pressure footage</strong>
+                <p>This recording is included as visual evidence for how ATM use can form a line near the entrance and interfere with entry or exit movement.</p>
+              </div>
+            </aside>
+          )}
+          {activeArchitecture === 'lounge' && (
+            <aside className="architecture-photo-evidence" aria-label="Competitor waiting-area comparison">
+              <button className="evidence-thumbnail" type="button" onClick={() => setShowLoungeModal(true)} aria-label="Open competitor waiting-area reference">
+                <img src={competitorWaitingAreaPath} alt="" loading="lazy" />
+                <span>View reference</span>
+              </button>
+              <div>
+                <span>Community banking reference</span>
+                <strong>Visible waiting area and seated service posture</strong>
+                <p>The Cambridge Savings Bank waiting area shows a lounge placed in clear view of staff and customers. HFCU can use this as a reference for a more visible lounge core and for shifting teller interactions away from standing-only windows toward more comfortable seated service points.</p>
+              </div>
+            </aside>
+          )}
         </section>
+        )}
+
+        {showLoungeModal && (
+          <div className="evidence-modal-backdrop" role="presentation" onClick={() => setShowLoungeModal(false)}>
+            <section className="evidence-modal" role="dialog" aria-modal="true" aria-label="Competitor waiting-area reference" onClick={(event) => event.stopPropagation()}>
+              <button className="modal-close-button" type="button" onClick={() => setShowLoungeModal(false)} aria-label="Close reference image">x</button>
+              <img src={competitorWaitingAreaPath} alt="Cambridge Savings Bank waiting area with lounge seating and visible teller area" />
+              <div>
+                <span>Competitor reference</span>
+                <h3>Waiting visibility and seated interaction model</h3>
+                <p>This image supports the lounge redesign recommendation: the waiting area should be visually connected to staff, and teller interactions should be more approachable through seated or semi-seated service moments rather than standing-only transaction windows.</p>
+              </div>
+            </section>
+          </div>
         )}
 
         {sitePage === 'mvp' && (
