@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Stamp,
   UploadCloud,
+  PlayCircle,
   Video,
 } from 'lucide-react'
 
@@ -22,7 +23,15 @@ type NotaryType = 'affidavit' | 'loan' | 'poa'
 type MainTab = 'home' | 'docs' | 'notary' | 'help'
 type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
-type SitePage = 'strategy' | 'mvp' | 'architecture'
+type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'methodology'
+
+type AppendixVideo = {
+  title: string
+  fileName: string
+  videoPath: string
+  thumbnail: string
+  focus: string
+}
 
 const requests = {
   branch: {
@@ -143,11 +152,53 @@ const bottomNav = [
   { tab: 'help', label: 'Help', icon: Headphones },
 ] as const
 
+const assetBase = import.meta.env.BASE_URL
+
+const appendixVideos: AppendixVideo[] = [
+  {
+    title: 'Appendix A.1',
+    fileName: '1.mp4',
+    videoPath: `${assetBase}appendix-videos/1.mp4`,
+    thumbnail: `${assetBase}appendix-thumbnails/1.mp4.png`,
+    focus: 'Branch lobby and queue flow observation',
+  },
+  {
+    title: 'Appendix A.2',
+    fileName: '2.mp4',
+    videoPath: `${assetBase}appendix-videos/2.mp4`,
+    thumbnail: `${assetBase}appendix-thumbnails/2.mp4.png`,
+    focus: 'Member arrivals and visible wait behavior',
+  },
+  {
+    title: 'Appendix A.3',
+    fileName: '3.mp4',
+    videoPath: `${assetBase}appendix-videos/3.mp4`,
+    thumbnail: `${assetBase}appendix-thumbnails/3.mp4.png`,
+    focus: 'Service desk demand and handoff patterns',
+  },
+  {
+    title: 'Appendix A.4',
+    fileName: '4.mp4',
+    videoPath: `${assetBase}appendix-videos/4.mp4`,
+    thumbnail: `${assetBase}appendix-thumbnails/4.mp4.png`,
+    focus: 'Queue visibility and waiting-area movement',
+  },
+  {
+    title: 'Appendix A.5',
+    fileName: '5.mp4',
+    videoPath: `${assetBase}appendix-videos/5.mp4`,
+    thumbnail: `${assetBase}appendix-thumbnails/5.mp4.png`,
+    focus: 'Customer experience evidence sample',
+  },
+]
+
 function getSitePage(): SitePage {
   const hash = window.location.hash.replace(/^#\/?/, '')
 
   if (hash === 'mvp') return 'mvp'
   if (hash === 'branch-architecture') return 'architecture'
+  if (hash === 'video-appendix') return 'appendix'
+  if (hash === 'traffic-methodology') return 'methodology'
   return 'strategy'
 }
 
@@ -294,6 +345,8 @@ function App() {
           <a className={sitePage === 'strategy' ? 'is-active' : ''} href="#/">Recommendations</a>
           <a className={sitePage === 'mvp' ? 'is-active' : ''} href="#/mvp">MVP</a>
           <a className={sitePage === 'architecture' ? 'is-active' : ''} href="#/branch-architecture">Branch architecture</a>
+          <a className={sitePage === 'appendix' ? 'is-active' : ''} href="#/video-appendix">Video appendix</a>
+          <a className={sitePage === 'methodology' ? 'is-active' : ''} href="#/traffic-methodology">Methodology</a>
           <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
         </nav>
       </header>
@@ -313,6 +366,8 @@ function App() {
             <div className="action-row">
               <a className="site-action primary-site-action" href="#/mvp">View MVP</a>
               <a className="site-action secondary-site-action" href="#/branch-architecture">See branch architecture</a>
+              <a className="site-action secondary-site-action" href="#/video-appendix">Open video appendix</a>
+              <a className="site-action secondary-site-action" href="#/traffic-methodology">View methodology</a>
             </div>
           </div>
 
@@ -376,6 +431,162 @@ function App() {
           </div>
         </section>
           </>
+        )}
+
+        {sitePage === 'appendix' && (
+        <section className="video-appendix" aria-label="Research video appendix">
+          <div className="section-heading">
+            <span className="page-label">Research appendix</span>
+            <h2>Video recordings for branch observation evidence</h2>
+            <p>Appendix A stores web-playable observation recordings as evidence for the queueing, visibility, and customer experience recommendations.</p>
+            <a className="section-inline-link" href="#/traffic-methodology">View customer arrival methodology</a>
+          </div>
+
+          <section className="appendix-video-grid" aria-label="Appendix video files">
+            {appendixVideos.map((video) => (
+              <article className="appendix-video-card" key={video.fileName}>
+                <a className="video-thumbnail" href={video.videoPath} target="_blank" rel="noreferrer" aria-label={`Play ${video.title}`}>
+                  <img src={video.thumbnail} alt="" loading="lazy" />
+                  <span><PlayCircle aria-hidden="true" size={28} /></span>
+                </a>
+                <div>
+                  <span>{video.title}</span>
+                  <h3>{video.fileName}</h3>
+                  <p>{video.focus}</p>
+                </div>
+                <a className="video-play-action" href={video.videoPath} target="_blank" rel="noreferrer">
+                  <PlayCircle aria-hidden="true" size={18} />
+                  Play recording
+                </a>
+              </article>
+            ))}
+          </section>
+        </section>
+        )}
+
+        {sitePage === 'methodology' && (
+        <section className="traffic-methodology" aria-label="Customer arrival rate and daily traffic estimation methodology">
+          <div className="section-heading">
+            <span className="page-label">Research methodology</span>
+            <h2>Customer Arrival Rate and Daily Traffic Estimation</h2>
+            <p>Customer traffic at Harvard Federal Credit Union's Harvard Square branch was estimated using five weekday video observations. The recordings support a preliminary arrival-rate estimate for branch reengineering decisions.</p>
+          </div>
+
+          <div className="methodology-summary">
+            <article>
+              <strong>Observation window</strong>
+              <p>Five recordings were reviewed from Monday through Friday. Each lasted approximately 20-25 minutes.</p>
+            </article>
+            <article>
+              <strong>Counting rule</strong>
+              <p>Customer entrances and exits were manually counted from the recordings. Pedestrians passing by the branch were excluded.</p>
+            </article>
+            <article>
+              <strong>Arrival-rate calculation</strong>
+              <p>The arrival rate (&lambda;) was calculated by dividing the number of entrances by the recording duration in hours.</p>
+            </article>
+          </div>
+
+          <div className="methodology-table-wrap">
+            <table className="methodology-table">
+              <caption>Observational results</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Day</th>
+                  <th scope="col">Approx. time</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col">IN</th>
+                  <th scope="col">OUT</th>
+                  <th scope="col">&lambda; arrivals/hr</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Monday</th>
+                  <td>2:00-2:25 PM</td>
+                  <td>24:33</td>
+                  <td>12</td>
+                  <td>9</td>
+                  <td>29.3</td>
+                </tr>
+                <tr>
+                  <th scope="row">Tuesday</th>
+                  <td>2:30-2:50 PM</td>
+                  <td>19:42</td>
+                  <td>7</td>
+                  <td>6</td>
+                  <td>21.3</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wednesday</th>
+                  <td>3:00-3:20 PM</td>
+                  <td>19:04</td>
+                  <td>4</td>
+                  <td>6</td>
+                  <td>12.6</td>
+                </tr>
+                <tr>
+                  <th scope="row">Thursday</th>
+                  <td>3:30-3:50 PM</td>
+                  <td>19:54</td>
+                  <td>1</td>
+                  <td>5</td>
+                  <td>3.0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Friday</th>
+                  <td>12:10-12:30 PM</td>
+                  <td>21:07</td>
+                  <td>15</td>
+                  <td>14</td>
+                  <td>42.6</td>
+                </tr>
+                <tr className="table-total">
+                  <th scope="row">Total</th>
+                  <td>Five weekdays</td>
+                  <td>104:20</td>
+                  <td>39</td>
+                  <td>40</td>
+                  <td>22.4</td>
+                </tr>
+              </tbody>
+            </table>
+            <p className="table-note">Note: Monday-Thursday observation times are approximate assigned windows, not verified recording timestamps. Friday's observation time was reported directly. Arrival rates use the actual recording durations.</p>
+          </div>
+
+          <div className="calculation-grid">
+            <article>
+              <span>Pooled arrival rate</span>
+              <strong>&lambda;-hat = 39 / (104.33 / 60) = 22.4 arrivals/hour</strong>
+            </article>
+            <article>
+              <span>Estimated weekday traffic</span>
+              <strong>N-day = 22.4 x 8 = approximately 180 arrivals/day</strong>
+            </article>
+          </div>
+
+          <div className="methodology-columns">
+            <section aria-label="Key findings">
+              <h3>Key findings</h3>
+              <ul>
+                <li>Pooled arrival rate: 22.4 customers/hour, or approximately one arrival every 2.7 minutes.</li>
+                <li>Monday-Thursday afternoon arrival rate: approximately 17.3 customers/hour.</li>
+                <li>Friday lunchtime arrival rate: 42.6 customers/hour, approximately 2.5 times the observed afternoon rate.</li>
+                <li>Estimated average weekday traffic: approximately 180 branch entrances per day.</li>
+              </ul>
+            </section>
+
+            <section aria-label="Limitations">
+              <h3>Limitations</h3>
+              <p>The daily traffic figure is a preliminary extrapolation from five short, nonrandom observation periods rather than a directly measured daily average. Morning hours were not sampled, and Friday's lunchtime observation is not directly comparable with the Monday-Thursday afternoon observations. Consequently, differences in arrival rates may reflect time-of-day effects rather than weekday effects. The counts represent branch entrances, not unique customers or arrivals to individual service queues.</p>
+            </section>
+          </div>
+
+          <div className="methodology-links">
+            <a className="site-action primary-site-action" href="#/video-appendix">Open supporting videos</a>
+            <a className="site-action secondary-site-action" href="#/">Back to recommendations</a>
+          </div>
+        </section>
         )}
 
         {sitePage === 'architecture' && (

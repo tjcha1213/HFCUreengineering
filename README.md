@@ -7,6 +7,8 @@ React and Vite prototype for HFCU member service flows.
 - Main recommendations page with reengineering rationale and pain point resolutions.
 - Separate MVP page at `#/mvp` for status checking, document readiness, remote notarization, and support routing.
 - Separate branch architecture page at `#/branch-architecture` with interior recommendations for queue visibility, service zoning, and customer experience.
+- Video appendix page at `#/video-appendix` for externally stored observation recordings that support the research.
+- Customer arrival methodology page at `#/traffic-methodology` for arrival-rate calculations, daily traffic estimation, findings, and limitations.
 - Hypothetical branch map for member flow, staff routing, notary work, and back-office support.
 
 ## Development
