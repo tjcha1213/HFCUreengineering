@@ -24,7 +24,7 @@ type NotaryType = 'affidavit' | 'loan' | 'poa'
 type MainTab = 'home' | 'docs' | 'notary' | 'help'
 type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
-type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'methodology'
+type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'videoAppendix' | 'methodology' | 'findings' | 'datasets'
 type ArchitectureRecommendationId = 'lounge' | 'surround' | 'atm' | 'queue'
 
 type AppendixVideo = {
@@ -301,8 +301,11 @@ function getSitePage(): SitePage {
 
   if (hash === 'mvp') return 'mvp'
   if (hash === 'branch-architecture') return 'architecture'
-  if (hash === 'video-appendix') return 'appendix'
+  if (hash === 'appendix') return 'appendix'
+  if (hash === 'video-appendix') return 'videoAppendix'
   if (hash === 'traffic-methodology') return 'methodology'
+  if (hash === 'key-findings') return 'findings'
+  if (hash === 'datasets') return 'datasets'
   return 'strategy'
 }
 
@@ -452,11 +455,10 @@ function App() {
           <h1>Cambridge Branch Service Redesign</h1>
         </div>
         <nav className="site-nav" aria-label="Project pages">
-          <a className={sitePage === 'strategy' ? 'is-active' : ''} href="#/">Recommendations</a>
-          <a className={sitePage === 'mvp' ? 'is-active' : ''} href="#/mvp">MVP</a>
-          <a className={sitePage === 'architecture' ? 'is-active' : ''} href="#/branch-architecture">Branch architecture</a>
-          <a className={sitePage === 'appendix' ? 'is-active' : ''} href="#/video-appendix">Video appendix</a>
           <a className={sitePage === 'methodology' ? 'is-active' : ''} href="#/traffic-methodology">Methodology</a>
+          <a className={sitePage === 'findings' ? 'is-active' : ''} href="#/key-findings">Key findings</a>
+          <a className={['strategy', 'mvp', 'architecture'].includes(sitePage) ? 'is-active' : ''} href="#/">Recommendations</a>
+          <a className={['appendix', 'videoAppendix', 'datasets'].includes(sitePage) ? 'is-active' : ''} href="#/appendix">Appendix</a>
           <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
         </nav>
       </header>
@@ -475,9 +477,7 @@ function App() {
             </p>
             <div className="action-row">
               <a className="site-action primary-site-action" href="#/mvp">View MVP</a>
-              <a className="site-action secondary-site-action" href="#/branch-architecture">See branch architecture</a>
-              <a className="site-action secondary-site-action" href="#/video-appendix">Open video appendix</a>
-              <a className="site-action secondary-site-action" href="#/traffic-methodology">View methodology</a>
+              <a className="site-action secondary-site-action" href="#/branch-architecture">Branch architecture</a>
             </div>
           </div>
 
@@ -544,6 +544,29 @@ function App() {
         )}
 
         {sitePage === 'appendix' && (
+        <section className="research-datasets" aria-label="Research appendix">
+          <div className="section-heading">
+            <span className="page-label">Appendix</span>
+            <h2>Research appendix</h2>
+            <p>The appendix keeps the supporting research materials separate from the main recommendations: observation videos, structured datasets, and the rationale evidence index.</p>
+          </div>
+
+          <div className="dataset-grid">
+            <article>
+              <strong>Video appendix</strong>
+              <p>Observation recordings used as evidence for queueing, customer visibility, ATM pressure, and customer experience analysis.</p>
+              <a className="site-action secondary-site-action" href="#/video-appendix">Open videos</a>
+            </article>
+            <article>
+              <strong>Datasets</strong>
+              <p>Structured CSV files for customer arrival counts and the evidence index behind the reengineering rationales.</p>
+              <a className="site-action secondary-site-action" href="#/datasets">Open datasets</a>
+            </article>
+          </div>
+        </section>
+        )}
+
+        {sitePage === 'videoAppendix' && (
         <section className="video-appendix" aria-label="Research video appendix">
           <div className="section-heading">
             <span className="page-label">Research appendix</span>
@@ -695,6 +718,82 @@ function App() {
           <div className="methodology-links">
             <a className="site-action primary-site-action" href="#/video-appendix">Open supporting videos</a>
             <a className="site-action secondary-site-action" href="#/">Back to recommendations</a>
+          </div>
+        </section>
+        )}
+
+        {sitePage === 'findings' && (
+        <section className="research-findings" aria-label="HFCU reengineering key findings">
+          <div className="section-heading">
+            <span className="page-label">Key findings</span>
+            <h2>What the observations imply for branch redesign</h2>
+            <p>The findings connect customer arrival patterns, observed queue friction, and branch layout constraints to the MVP and physical architecture recommendations.</p>
+          </div>
+
+          <div className="findings-grid">
+            <article>
+              <strong>Traffic is high enough to make waiting visible</strong>
+              <p>The pooled arrival estimate is 22.4 customers/hour, or roughly one customer every 2.7 minutes during the sampled periods.</p>
+            </article>
+            <article>
+              <strong>Lunchtime demand appears materially heavier</strong>
+              <p>Friday lunchtime produced 42.6 arrivals/hour, approximately 2.5 times the Monday-Thursday afternoon rate observed in the study window.</p>
+            </article>
+            <article>
+              <strong>Current waiting visibility is weak</strong>
+              <p>The lounge placement is too far from the staff-facing service core, reducing shared visibility between waiting customers, tellers, and office staff.</p>
+            </article>
+            <article>
+              <strong>ATM flow can obstruct entry and exit</strong>
+              <p>The ATM location can create a line that behaves like a barrier near the entrance, so ATM traffic should be separated from the main arrival path.</p>
+            </article>
+            <article>
+              <strong>Digital status can absorb routine uncertainty</strong>
+              <p>The MVP should reduce repetitive status questions by showing queue stage, document readiness, wait context, and next actions before staff intervention.</p>
+            </article>
+            <article>
+              <strong>Seated interactions better match consultative service</strong>
+              <p>Standing teller windows should be complemented by seated or semi-seated service points for longer guidance, document review, and relationship-based support.</p>
+            </article>
+          </div>
+
+          <div className="findings-actions">
+            <a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a>
+            <a className="site-action secondary-site-action" href="#/">Open recommendations</a>
+            <a className="site-action secondary-site-action" href="#/datasets">Open datasets</a>
+          </div>
+        </section>
+        )}
+
+        {sitePage === 'datasets' && (
+        <section className="research-datasets" aria-label="Research datasets and rationale evidence">
+          <div className="section-heading">
+            <span className="page-label">Appendix datasets</span>
+            <h2>Datasets created for the rationales</h2>
+            <p>This appendix groups the structured research files and evidence assets that support the methodology, key findings, MVP rationale, and branch architecture recommendations.</p>
+          </div>
+
+          <div className="dataset-grid">
+            <article>
+              <strong>Customer arrival observations</strong>
+              <p>Manual entrance and exit counts by observation day, duration, and calculated arrival rate.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/customer-arrival-observations.csv`} target="_blank" rel="noreferrer">Open CSV</a>
+            </article>
+            <article>
+              <strong>Rationale evidence index</strong>
+              <p>Index connecting each major recommendation to the supporting evidence page, asset, or observation source.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/rationale-evidence-index.csv`} target="_blank" rel="noreferrer">Open CSV</a>
+            </article>
+            <article>
+              <strong>Video appendix</strong>
+              <p>Observation recordings used as appendix evidence for queueing, visibility, and customer experience analysis.</p>
+              <a className="site-action secondary-site-action" href="#/video-appendix">Open videos</a>
+            </article>
+            <article>
+              <strong>Branch architecture assets</strong>
+              <p>Floor plan, ATM queue clip, ATM thumbnail, and competitor waiting-area reference used in the architecture rationale.</p>
+              <a className="site-action secondary-site-action" href="#/branch-architecture">Open architecture</a>
+            </article>
           </div>
         </section>
         )}

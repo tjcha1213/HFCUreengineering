@@ -1,0 +1,7 @@
+rationale,evidence_type,evidence_asset_or_page,reasoning_use
+Customer arrival rate,Structured observation dataset,#/traffic-methodology,Supports traffic estimate and daily arrivals extrapolation
+Video observation evidence,Video appendix,#/video-appendix,Supports queueing visibility and customer experience observations
+Lounge visibility,Competitor reference image,architecture/csb-waiting-area.png,Supports recentered lounge and seated interaction recommendation
+ATM queue pressure,Compressed video evidence,architecture/atm-queue-pressure.mp4,Supports separating ATM traffic from entrance and exit path
+Branch layout,Conceptual floor plan,architecture/hfcu-floor-plan.png,Supports visual overlay recommendations for branch architecture
+Digital status MVP,Interactive app prototype,#/mvp,Supports self-service status readiness and handoff recommendations

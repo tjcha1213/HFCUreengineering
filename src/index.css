@@ -167,7 +167,9 @@ svg {
 .prototype-objective,
 .branch-system,
 .video-appendix,
-.traffic-methodology {
+.traffic-methodology,
+.research-findings,
+.research-datasets {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--white);
@@ -270,7 +272,9 @@ svg {
 .branch-system,
 .mvp-stage,
 .video-appendix,
-.traffic-methodology {
+.traffic-methodology,
+.research-findings,
+.research-datasets {
   margin-bottom: 18px;
 }
 
@@ -311,14 +315,18 @@ svg {
 }
 
 .recommendation-grid,
-.architecture-recommendations {
+.architecture-recommendations,
+.findings-grid,
+.dataset-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
 .recommendation-grid article,
-.architecture-card {
+.architecture-card,
+.findings-grid article,
+.dataset-grid article {
   display: grid;
   gap: 8px;
   padding: 14px;
@@ -348,14 +356,27 @@ svg {
 }
 
 .recommendation-grid strong,
-.architecture-card strong {
+.architecture-card strong,
+.findings-grid strong,
+.dataset-grid strong {
   color: var(--crimson);
 }
 
 .recommendation-grid p,
-.architecture-card p {
+.architecture-card p,
+.findings-grid p,
+.dataset-grid p {
   color: var(--muted);
   line-height: 1.48;
+}
+
+.dataset-grid article {
+  align-content: start;
+}
+
+.dataset-grid .site-action {
+  width: fit-content;
+  margin-top: 4px;
 }
 
 .video-appendix {
@@ -504,6 +525,23 @@ svg {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.findings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffbfb;
+}
+
+.findings-actions .site-action {
+  min-height: 40px;
+  padding: 9px 13px;
 }
 
 .appendix-video-card span {
@@ -1836,6 +1874,8 @@ svg {
   .map-layout,
   .recommendation-grid,
   .architecture-recommendations,
+  .findings-grid,
+  .dataset-grid,
   .appendix-video-grid,
   .methodology-summary,
   .calculation-grid,
@@ -1886,7 +1926,8 @@ svg {
 }
 
 @media (max-width: 520px) {
-  .action-row {
+  .action-row,
+  .findings-actions {
     display: grid;
   }
 
@@ -1895,7 +1936,9 @@ svg {
   .prototype-objective,
   .branch-system,
   .video-appendix,
-  .traffic-methodology {
+  .traffic-methodology,
+  .research-findings,
+  .research-datasets {
     padding: 16px;
   }
 

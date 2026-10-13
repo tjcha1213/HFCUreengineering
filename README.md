@@ -9,6 +9,7 @@ React and Vite prototype for HFCU member service flows.
 - Separate branch architecture page at `#/branch-architecture` with interior recommendations for queue visibility, service zoning, and customer experience.
 - Video appendix page at `#/video-appendix` for externally stored observation recordings that support the research.
 - Customer arrival methodology page at `#/traffic-methodology` for arrival-rate calculations, daily traffic estimation, findings, and limitations.
+- Key findings page at `#/key-findings` and datasets appendix at `#/datasets` for structured research evidence.
 - Hypothetical branch map for member flow, staff routing, notary work, and back-office support.
 
 ## Development
