@@ -18,7 +18,7 @@
   --soft-teal: #fbebef;
   --soft-blue: #f7ebf8;
   --soft-gold: #fff0f2;
-  --bottom-nav-height: 72px;
+  --bottom-nav-height: 60px;
 }
 
 * {
@@ -1189,7 +1189,7 @@ svg {
   }
 
   .mvp-stage .phone-container {
-    height: min(844px, calc(100dvh - 238px));
+    height: min(844px, calc(100dvh - 210px));
     min-height: 640px;
     border: 1px solid rgba(255, 255, 255, 0.9);
   }
@@ -1221,15 +1221,99 @@ svg {
   position: relative;
 }
 
+.iphone-status-bar {
+  flex: 0 0 30px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 20px 3px;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
+  position: relative;
+  z-index: 6;
+}
+
+.iphone-status-bar > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signal-bars {
+  display: inline-flex;
+  align-items: end;
+  gap: 2px;
+  height: 11px;
+}
+
+.signal-bars b {
+  display: block;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.signal-bars b:nth-child(1) { height: 5px; }
+.signal-bars b:nth-child(2) { height: 8px; }
+.signal-bars b:nth-child(3) { height: 11px; }
+
+.wifi-icon {
+  width: 16px;
+  height: 13px;
+  color: var(--ink);
+}
+
+.wifi-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.wifi-icon path:last-child {
+  stroke-width: 4;
+}
+
+.battery-icon {
+  width: 22px;
+  height: 11px;
+  padding: 2px;
+  border: 1.7px solid var(--ink);
+  border-radius: 4px;
+  position: relative;
+}
+
+.battery-icon::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: 3px;
+  width: 2px;
+  height: 5px;
+  border-radius: 0 2px 2px 0;
+  background: var(--ink);
+}
+
+.battery-icon b {
+  display: block;
+  width: 72%;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
 .scroll-area {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   overflow-x: hidden;
-  overflow-y: auto;
-  padding: 18px 16px 22px;
+  overflow-y: hidden;
+  padding: 12px 14px 12px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1260,13 +1344,13 @@ svg {
 
 .screen-title {
   display: grid;
-  gap: 6px;
-  padding: 4px 0 8px;
+  gap: 4px;
+  padding: 0 0 4px;
 }
 
 .screen-title h1 {
   max-width: 320px;
-  font-size: 1.55rem;
+  font-size: 1.28rem;
   line-height: 1.12;
   letter-spacing: 0;
 }
@@ -1274,9 +1358,9 @@ svg {
 .hero-card {
   flex-shrink: 0;
   display: grid;
-  gap: 5px;
-  padding: 18px;
-  border-radius: 16px;
+  gap: 3px;
+  padding: 12px;
+  border-radius: 14px;
   color: var(--white);
   background:
     linear-gradient(135deg, rgba(57, 229, 205, 0.16), transparent 36%),
@@ -1299,19 +1383,50 @@ svg {
 }
 
 .hero-card h1 {
-  font-size: 1.42rem;
+  font-size: 1.12rem;
   line-height: 1.15;
   letter-spacing: 0;
 }
 
 .hero-card p {
   color: rgba(255, 255, 255, 0.86);
+  font-size: 0.82rem;
+}
+
+.home-screen {
+  gap: 7px;
+}
+
+.home-screen .hero-card {
+  padding: 10px 12px;
+}
+
+.home-screen .status-search label,
+.home-screen .timeline-steps small,
+.home-screen .action-card p {
+  display: none;
+}
+
+.home-screen .status-search input,
+.home-screen .status-search button,
+.home-screen .primary-action {
+  min-height: 32px;
+}
+
+.home-screen .timeline {
+  gap: 6px;
+  padding: 8px;
+}
+
+.home-screen .timeline-steps > div > span {
+  width: 22px;
+  height: 22px;
 }
 
 .status-search {
   flex-shrink: 0;
   display: grid;
-  gap: 7px;
+  gap: 4px;
 }
 
 .status-search label {
@@ -1329,7 +1444,7 @@ svg {
 }
 
 .status-search input {
-  min-height: 44px;
+  min-height: 36px;
   padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -1343,7 +1458,7 @@ svg {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 44px;
+  min-height: 36px;
   padding: 0 12px;
   border-radius: 12px;
   color: var(--white);
@@ -1367,7 +1482,7 @@ svg {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .chip {
@@ -1376,8 +1491,8 @@ svg {
   justify-content: center;
   gap: 6px;
   min-width: 0;
-  min-height: 46px;
-  padding: 8px;
+  min-height: 36px;
+  padding: 6px;
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--muted);
@@ -1400,19 +1515,51 @@ svg {
   background: var(--soft-blue);
 }
 
+.notary-screen {
+  gap: 7px;
+}
+
+.notary-screen .hero-card {
+  padding: 10px 12px;
+}
+
+.notary-screen .chip {
+  min-height: 34px;
+}
+
+.notary-screen .action-card p {
+  display: none;
+}
+
+.notary-screen .checklist {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.notary-screen .checklist p,
+.notary-screen .document-list p {
+  grid-template-columns: 1fr;
+  gap: 1px;
+}
+
+.notary-screen .checklist small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .status-summary {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(96px, 0.75fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .time-panel,
 .step-panel,
 .request-card {
-  padding: 14px;
+  padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--white);
   box-shadow: 0 10px 24px rgba(130, 36, 51, 0.05);
 }
@@ -1423,7 +1570,7 @@ svg {
   display: grid;
   align-content: center;
   gap: 3px;
-  min-height: 88px;
+  min-height: 66px;
 }
 
 .time-panel {
@@ -1445,7 +1592,7 @@ svg {
 
 .time-panel strong {
   color: var(--crimson);
-  font-size: 1.7rem;
+  font-size: 1.34rem;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1475,7 +1622,7 @@ svg {
 }
 
 .step-panel strong {
-  font-size: 2.1rem;
+  font-size: 1.58rem;
   line-height: 0.95;
   letter-spacing: 0;
 }
@@ -1485,7 +1632,7 @@ svg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 .request-card div {
@@ -1500,7 +1647,7 @@ svg {
 
 .request-card b {
   flex: 0 0 auto;
-  padding: 8px 10px;
+  padding: 6px 8px;
   border-radius: 999px;
   color: var(--crimson);
   background: var(--soft-teal);
@@ -1514,7 +1661,7 @@ svg {
 
 .progress {
   flex-shrink: 0;
-  height: 8px;
+  height: 6px;
   overflow: hidden;
   border-radius: 999px;
   background: #f0dfe3;
@@ -1535,12 +1682,12 @@ svg {
 .action-card {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: 36px 1fr;
-  gap: 10px;
-  padding: 14px;
+  grid-template-columns: 30px 1fr;
+  gap: 8px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-left: 4px solid var(--gold);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #fffafb;
   box-shadow: 0 10px 24px rgba(130, 36, 51, 0.05);
 }
@@ -1553,9 +1700,9 @@ svg {
 .panel-icon {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   color: var(--white);
   background: var(--gold);
 }
@@ -1570,14 +1717,16 @@ svg {
 
 .action-card strong {
   display: block;
-  margin-top: 3px;
-  line-height: 1.25;
+  margin-top: 2px;
+  line-height: 1.18;
+  font-size: 0.88rem;
 }
 
 .action-card p {
-  margin-top: 5px;
+  margin-top: 3px;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.76rem;
+  line-height: 1.25;
 }
 
 .primary-action {
@@ -1585,7 +1734,7 @@ svg {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: 34px;
   width: 100%;
   border-radius: 12px;
   color: var(--white);
@@ -1601,8 +1750,8 @@ svg {
 .checklist,
 .document-list {
   display: grid;
-  gap: 8px;
-  padding: 10px;
+  gap: 6px;
+  padding: 8px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--white);
@@ -1611,8 +1760,8 @@ svg {
 
 .timeline {
   flex-shrink: 0;
-  gap: 12px;
-  padding: 14px 12px 12px;
+  gap: 8px;
+  padding: 10px;
   overflow: hidden;
 }
 
@@ -1634,7 +1783,7 @@ svg {
 
 .timeline-heading b {
   flex: 0 0 auto;
-  padding: 6px 9px;
+  padding: 5px 8px;
   border-radius: 999px;
   color: var(--crimson);
   background: var(--soft-teal);
@@ -1644,8 +1793,8 @@ svg {
 
 .timeline-axis {
   position: relative;
-  height: 8px;
-  margin: 0 20px;
+  height: 6px;
+  margin: 0 16px;
   overflow: hidden;
   border-radius: 999px;
   background: #f1dfe4;
@@ -1673,7 +1822,7 @@ svg {
 
 .timeline-steps > div {
   justify-items: center;
-  gap: 7px;
+  gap: 5px;
   min-width: 0;
   text-align: center;
 }
@@ -1687,8 +1836,8 @@ svg {
 .timeline-steps > div > span {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border: 2px solid #d9c6cc;
   border-radius: 999px;
   color: var(--muted);
@@ -1718,7 +1867,7 @@ svg {
 .checklist strong,
 .document-list strong {
   color: var(--ink);
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   line-height: 1.2;
 }
 
@@ -1752,8 +1901,8 @@ svg {
 }
 
 .document-list div {
-  min-height: 48px;
-  padding: 6px;
+  min-height: 40px;
+  padding: 5px;
   border-radius: 10px;
 }
 
@@ -1771,23 +1920,24 @@ svg {
 
 .notary-check {
   display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 10px;
+  grid-template-columns: 28px 1fr;
+  gap: 7px;
   align-items: center;
-  min-height: 54px;
-  padding: 8px;
+  min-height: 40px;
+  padding: 6px;
   border: 1px solid transparent;
   border-radius: 12px;
   color: var(--ink);
+  cursor: default;
   text-align: left;
 }
 
 .notary-check > span {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
   color: var(--muted);
   background: #f4e8ec;
 }
@@ -1805,14 +1955,17 @@ svg {
 
 .support-card {
   display: grid;
-  grid-template-columns: 38px 1fr;
-  gap: 12px;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
   align-items: start;
-  padding: 16px;
+  width: 100%;
+  padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 12px;
+  color: var(--ink);
   background: var(--white);
   box-shadow: 0 10px 24px rgba(130, 36, 51, 0.04);
+  text-align: left;
 }
 
 .support-card svg {
@@ -1831,6 +1984,308 @@ svg {
 .support-card p {
   margin-top: 4px;
   color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.mvp-chat-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  align-items: stretch;
+  padding: 10px;
+  background: rgba(47, 52, 51, 0.3);
+}
+
+.mvp-chat-panel {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: 0 22px 56px rgba(47, 52, 51, 0.28);
+}
+
+.mvp-chat-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mvp-chat-header span,
+.mvp-chat-message span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.mvp-chat-header h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 3px;
+  color: var(--crimson);
+  font-size: 1rem;
+}
+
+.mvp-chat-header p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.mvp-chat-header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: var(--crimson);
+  background: var(--soft-teal);
+}
+
+.mvp-chat-messages {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 12px;
+  background: var(--paper);
+}
+
+.mvp-chat-message {
+  max-width: 88%;
+  display: grid;
+  gap: 4px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+}
+
+.mvp-chat-message p {
+  color: var(--ink);
+  font-size: 0.82rem;
+  line-height: 1.32;
+}
+
+.mvp-chat-message.member {
+  align-self: end;
+  border-color: rgba(130, 36, 51, 0.35);
+  background: var(--crimson);
+}
+
+.mvp-chat-message.member span,
+.mvp-chat-message.member p {
+  color: var(--white);
+}
+
+.mvp-chat-message.typing p {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.mvp-quick-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+
+.mvp-quick-questions button {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(130, 36, 51, 0.18);
+  border-radius: 999px;
+  color: var(--crimson);
+  background: var(--soft-teal);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.mvp-chat-compose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+
+.mvp-chat-compose input {
+  height: 38px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--white);
+}
+
+.mvp-chat-compose button {
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--white);
+  background: var(--crimson);
+}
+
+.appointment-picker-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  background: rgba(47, 52, 51, 0.34);
+}
+
+.appointment-picker-panel {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: 0 22px 56px rgba(47, 52, 51, 0.28);
+}
+
+.appointment-picker-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: start;
+}
+
+.appointment-picker-header span,
+.calendar-month span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.appointment-picker-header h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 3px;
+  color: var(--plum);
+  font-size: 1rem;
+}
+
+.appointment-picker-header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: var(--plum);
+  background: var(--soft-blue);
+}
+
+.calendar-card {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fffbff;
+}
+
+.calendar-month {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.calendar-month strong {
+  color: var(--ink);
+}
+
+.calendar-weekdays,
+.calendar-month-grid,
+.appointment-times {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.calendar-weekdays {
+  gap: 3px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.calendar-weekdays span {
+  line-height: 1;
+}
+
+.calendar-month-grid {
+  gap: 3px;
+}
+
+.calendar-month-grid button,
+.calendar-month-grid i,
+.appointment-times button {
+  display: grid;
+  place-items: center;
+  min-height: 31px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--muted);
+  background: var(--white);
+  font-weight: 850;
+}
+
+.calendar-month-grid i {
+  border-color: transparent;
+  background: transparent;
+}
+
+.calendar-month-grid button {
+  font-size: 0.78rem;
+}
+
+.calendar-month-grid button:disabled {
+  color: #b5a6ad;
+  background: #f7f1f3;
+  opacity: 1;
+}
+
+.calendar-month-grid button.is-available {
+  color: var(--plum);
+  border-color: rgba(141, 44, 138, 0.26);
+  background: var(--soft-blue);
+}
+
+.calendar-month-grid button.is-active,
+.appointment-times button.is-active {
+  color: var(--white);
+  border-color: transparent;
+  background: var(--plum);
+  box-shadow: 0 10px 22px rgba(141, 44, 138, 0.18);
+}
+
+.appointment-times {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.appointment-times button {
+  min-height: 38px;
+  color: var(--plum);
+  background: var(--soft-blue);
 }
 
 .bottom-nav {
@@ -1838,7 +2293,7 @@ svg {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  padding: 4px 6px 6px;
+  padding: 4px 6px;
   border-top: 1px solid #efe0e4;
   background: var(--white);
   box-shadow: 0 -4px 20px rgba(130, 36, 51, 0.06);
@@ -1854,8 +2309,8 @@ svg {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  min-height: 58px;
-  border-radius: 14px;
+  min-height: 52px;
+  border-radius: 12px;
   color: #96888b;
   font-size: 0.68rem;
   font-weight: 800;

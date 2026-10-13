@@ -9,14 +9,17 @@ import {
   Headphones,
   Home,
   Landmark,
+  MessageCircle,
   ReceiptText,
   Search,
+  Send,
   ShieldCheck,
   Stamp,
   UploadCloud,
   Play,
   PlayCircle,
   Video,
+  X,
 } from 'lucide-react'
 
 type RequestType = 'branch' | 'loan' | 'notary'
@@ -26,6 +29,13 @@ type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
 type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'videoAppendix' | 'methodology' | 'findings' | 'datasets'
 type ArchitectureRecommendationId = 'lounge' | 'surround' | 'atm' | 'queue'
+type ChatMessage = {
+  id: number
+  author: 'member' | 'worker'
+  name: string
+  text: string
+  time: string
+}
 
 type AppendixVideo = {
   title: string
@@ -296,6 +306,52 @@ const architectureRecommendations: ArchitectureRecommendation[] = [
   },
 ]
 
+const suggestedChatQuestions = [
+  'What should I bring?',
+  'How long is the wait?',
+  'Can I upload documents?',
+  'Can someone call me?',
+]
+
+const availableAppointmentDays = new Set([14, 15, 16, 17, 20, 21, 22, 23, 27, 28, 29, 30])
+const calendarWeekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+const appointmentCalendarDays = Array.from({ length: 35 }, (_, index) => {
+  const day = index - 3
+  return day > 0 && day <= 31
+    ? { day, date: `Oct ${day}`, available: availableAppointmentDays.has(day) }
+    : null
+})
+const appointmentTimes = ['10:30 AM', '1:15 PM', '4:45 PM']
+
+function currentChatTime() {
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date())
+}
+
+function getHfcuWorkerReply(question: string, request: (typeof requests)[RequestType]) {
+  const normalized = question.toLowerCase()
+
+  if (normalized.includes('bring') || normalized.includes('document') || normalized.includes('upload')) {
+    return request.documentNote
+  }
+
+  if (normalized.includes('wait') || normalized.includes('long') || normalized.includes('eta') || normalized.includes('time')) {
+    return `${request.etaLabel}: ${request.eta}. ${request.nextAction}`
+  }
+
+  if (normalized.includes('call') || normalized.includes('phone') || normalized.includes('callback')) {
+    return `I can flag ${request.owner} to call you back using request ${request.id}. You can also keep this chat open for updates.`
+  }
+
+  if (normalized.includes('notary') || normalized.includes('appointment') || normalized.includes('schedule')) {
+    return 'For notary support, please confirm your ID, upload the document, and choose an available session in the Notary tab.'
+  }
+
+  return `I can help with request ${request.id}, document readiness, wait status, uploads, notary scheduling, or a callback from ${request.owner}.`
+}
+
 function getSitePage(): SitePage {
   const hash = window.location.hash.replace(/^#\/?/, '')
 
@@ -317,12 +373,28 @@ function App() {
   const [notaryType, setNotaryType] = useState<NotaryType>('affidavit')
   const [notaryStep, setNotaryStep] = useState<NotaryStep>('overview')
   const [slot, setSlot] = useState('10:30 AM')
+  const [appointmentDate, setAppointmentDate] = useState('Oct 14')
+  const [draftSlot, setDraftSlot] = useState('10:30 AM')
+  const [draftDate, setDraftDate] = useState('Oct 14')
+  const [appointmentPickerOpen, setAppointmentPickerOpen] = useState(false)
   const [sessionText, setSessionText] = useState(notaryFlows.affidavit.session)
   const [notaryProgress, setNotaryProgress] = useState(notaryFlows.affidavit.progress)
   const [completedChecks, setCompletedChecks] = useState<number[]>([0, 1])
   const [branchReminder, setBranchReminder] = useState(false)
   const [activeArchitecture, setActiveArchitecture] = useState<ArchitectureRecommendationId | null>(null)
   const [showLoungeModal, setShowLoungeModal] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatInput, setChatInput] = useState('')
+  const [workerTyping, setWorkerTyping] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: 1,
+      author: 'worker',
+      name: 'HFCU member services',
+      text: 'Hi, I can help with your branch visit, documents, notary appointment, or request status.',
+      time: currentChatTime(),
+    },
+  ])
 
   useEffect(() => {
     const syncPage = () => setSitePage(getSitePage())
@@ -408,6 +480,9 @@ function App() {
     setSessionText(notaryFlows[type].session)
     setNotaryProgress(notaryFlows[type].progress)
     setSlot('10:30 AM')
+    setAppointmentDate('Oct 14')
+    setDraftSlot('10:30 AM')
+    setDraftDate('Oct 14')
     setNotaryStep('overview')
     setCompletedChecks([0, 1])
   }
@@ -420,17 +495,25 @@ function App() {
     setActiveTab(recommendedTarget)
   }
 
-  function reserveSlot(nextSlot = slot) {
+  function openAppointmentPicker(nextSlot = slot) {
+    setDraftSlot(nextSlot)
+    setDraftDate(appointmentDate)
+    setAppointmentPickerOpen(true)
+  }
+
+  function reserveSlot(nextSlot = draftSlot, nextDate = draftDate) {
     setSlot(nextSlot)
-    setSessionText(`Session confirmed for ${nextSlot}`)
+    setAppointmentDate(nextDate)
+    setSessionText(`Session confirmed for ${nextDate} at ${nextSlot}`)
     setNotaryProgress(92)
     setNotaryStep('session')
     setCompletedChecks((current) => current.includes(2) ? current : [...current, 2])
+    setAppointmentPickerOpen(false)
   }
 
   function runNotaryAction() {
     if (notaryStep === 'overview') {
-      reserveSlot()
+      openAppointmentPicker()
       return
     }
     if (notaryStep === 'verify') {
@@ -438,13 +521,49 @@ function App() {
       return
     }
     if (notaryStep === 'session') {
-      setSessionText(`Session confirmed for ${slot}`)
+      setSessionText(`Session confirmed for ${appointmentDate} at ${slot}`)
       setNotaryProgress(100)
       setNotaryStep('receipt')
       setCompletedChecks([0, 1, 2, 3])
       return
     }
     setNotaryStep('overview')
+  }
+
+  function openChat() {
+    setChatOpen(true)
+  }
+
+  function sendChatMessage(presetQuestion?: string) {
+    const text = (presetQuestion ?? chatInput).trim()
+    if (!text) return
+
+    setChatMessages((messages) => [
+      ...messages,
+      {
+        id: Date.now(),
+        author: 'member',
+        name: 'Maya',
+        text,
+        time: currentChatTime(),
+      },
+    ])
+    setChatInput('')
+    setWorkerTyping(true)
+
+    window.setTimeout(() => {
+      setChatMessages((messages) => [
+        ...messages,
+        {
+          id: Date.now() + 1,
+          author: 'worker',
+          name: 'HFCU member services',
+          text: getHfcuWorkerReply(text, request),
+          time: currentChatTime(),
+        },
+      ])
+      setWorkerTyping(false)
+    }, 650)
   }
 
   return (
@@ -913,14 +1032,21 @@ function App() {
           </div>
           <div className="app-shell">
             <div className="phone-container" role="application" aria-label="HFCU member service app MVP">
+        <div className="iphone-status-bar" aria-label="Phone status">
+          <span>9:41</span>
+          <div aria-hidden="true">
+            <i className="signal-bars"><b /><b /><b /></i>
+            <svg className="wifi-icon" viewBox="0 0 18 14">
+              <path d="M2.1 4.8C5.9 1.6 12.1 1.6 15.9 4.8" />
+              <path d="M5 8C7.2 6.2 10.8 6.2 13 8" />
+              <path d="M8.9 11.2H9.1" />
+            </svg>
+            <i className="battery-icon"><b /></i>
+          </div>
+        </div>
         <main className="screen">
           {activeTab === 'home' && (
-            <section className="scroll-area">
-              <div className="app-header">
-                <p>HFCU</p>
-                <span>9:41</span>
-              </div>
-
+            <section className="scroll-area home-screen">
               <section className="hero-card">
                 <span>Hi, Maya</span>
                 <h1>{request.title}</h1>
@@ -1094,24 +1220,22 @@ function App() {
                   const isComplete = completedChecks.includes(index)
                   const isCurrent = currentNotaryStep === index
                   return (
-                    <button
+                    <article
                       key={check.title}
                       className={`notary-check${isComplete ? ' is-complete' : ''}${isCurrent ? ' is-current' : ''}`}
-                      type="button"
-                      aria-pressed={isComplete}
-                      onClick={() => setCompletedChecks((current) => current.includes(index) ? current : [...current, index])}
+                      aria-current={isCurrent ? 'step' : undefined}
                     >
                       <span>{isComplete ? <CheckCircle2 aria-hidden="true" size={18} /> : <CheckIcon aria-hidden="true" size={18} />}</span>
                       <p><strong>{check.title}</strong><small>{check.body}</small></p>
-                    </button>
+                    </article>
                   )
                 })}
               </section>
 
-              <div className="section-label with-value"><span>Available today</span><b>{slot}</b></div>
+              <div className="section-label with-value"><span>Available appointments</span><b>{appointmentDate} · {slot}</b></div>
               <section className="chip-grid">
-                {['10:30 AM', '1:15 PM', '4:45 PM'].map((time) => (
-                  <button key={time} className={`chip${slot === time ? ' is-active' : ''}`} type="button" onClick={() => reserveSlot(time)}>
+                {appointmentTimes.map((time) => (
+                  <button key={time} className={`chip${slot === time ? ' is-active' : ''}`} type="button" onClick={() => openAppointmentPicker(time)}>
                     <CalendarClock aria-hidden="true" size={16} />
                     {time}
                   </button>
@@ -1126,13 +1250,13 @@ function App() {
                 <p>Support</p>
                 <h1>Get help without starting over</h1>
               </div>
-              <section className="support-card">
+              <button className="support-card" type="button" onClick={openChat}>
                 <Headphones aria-hidden="true" size={22} />
                 <div>
                   <strong>Chat with {request.owner}</strong>
                   <p>Share your request ID and continue from the current step.</p>
                 </div>
-              </section>
+              </button>
               <section className="support-card">
                 <Bell aria-hidden="true" size={22} />
                 <div>
@@ -1147,6 +1271,121 @@ function App() {
                   <p>Use {request.id} at the desk so staff can find the request instantly.</p>
                 </div>
               </section>
+            </section>
+          )}
+
+          {chatOpen && (
+            <section className="mvp-chat-shell" aria-label="HFCU member services chat">
+              <div className="mvp-chat-panel">
+                <header className="mvp-chat-header">
+                  <div>
+                    <span>Connected now</span>
+                    <h3><MessageCircle aria-hidden="true" size={17} /> HFCU chat</h3>
+                    <p>{request.owner} can see {request.id}.</p>
+                  </div>
+                  <button type="button" aria-label="Close chat" onClick={() => setChatOpen(false)}>
+                    <X aria-hidden="true" size={17} />
+                  </button>
+                </header>
+
+                <div className="mvp-chat-messages" aria-live="polite">
+                  {chatMessages.map((message) => (
+                    <article key={message.id} className={`mvp-chat-message ${message.author}`}>
+                      <span>{message.name} · {message.time}</span>
+                      <p>{message.text}</p>
+                    </article>
+                  ))}
+                  {workerTyping && (
+                    <article className="mvp-chat-message worker typing">
+                      <span>HFCU member services</span>
+                      <p>Typing...</p>
+                    </article>
+                  )}
+                </div>
+
+                <div className="mvp-quick-questions" aria-label="Suggested chat questions">
+                  {suggestedChatQuestions.map((question) => (
+                    <button key={question} type="button" onClick={() => sendChatMessage(question)}>
+                      {question}
+                    </button>
+                  ))}
+                </div>
+
+                <form
+                  className="mvp-chat-compose"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    sendChatMessage()
+                  }}
+                >
+                  <input
+                    aria-label="Message HFCU member services"
+                    value={chatInput}
+                    onChange={(event) => setChatInput(event.target.value)}
+                    placeholder="Ask HFCU"
+                  />
+                  <button type="submit" aria-label="Send message">
+                    <Send aria-hidden="true" size={17} />
+                  </button>
+                </form>
+              </div>
+            </section>
+          )}
+
+          {appointmentPickerOpen && (
+            <section className="appointment-picker-shell" aria-label="Choose appointment date and time">
+              <div className="appointment-picker-panel">
+                <header className="appointment-picker-header">
+                  <div>
+                    <span>Appointment</span>
+                    <h3><CalendarClock aria-hidden="true" size={17} /> Choose date and time</h3>
+                  </div>
+                  <button type="button" aria-label="Close calendar" onClick={() => setAppointmentPickerOpen(false)}>
+                    <X aria-hidden="true" size={17} />
+                  </button>
+                </header>
+
+                <div className="calendar-card" aria-label="Available dates">
+                  <div className="calendar-month">
+                    <strong>October 2026</strong>
+                    <span>Available days highlighted</span>
+                  </div>
+                  <div className="calendar-weekdays" aria-hidden="true">
+                    {calendarWeekdays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}
+                  </div>
+                  <div className="calendar-month-grid">
+                    {appointmentCalendarDays.map((date, index) => date ? (
+                      <button
+                        key={date.date}
+                        className={`${draftDate === date.date ? 'is-active' : ''}${date.available ? ' is-available' : ''}`}
+                        type="button"
+                        disabled={!date.available}
+                        aria-label={date.available ? `${date.date} available` : `${date.date} unavailable`}
+                        onClick={() => setDraftDate(date.date)}
+                      >
+                        <span>{date.day}</span>
+                      </button>
+                    ) : <i key={`empty-${index}`} aria-hidden="true" />)}
+                  </div>
+                </div>
+
+                <div className="appointment-times" aria-label="Available times">
+                  {appointmentTimes.map((time) => (
+                    <button
+                      key={time}
+                      className={draftSlot === time ? 'is-active' : ''}
+                      type="button"
+                      onClick={() => setDraftSlot(time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+
+                <button className="primary-action blue-action" type="button" onClick={() => reserveSlot()}>
+                  Confirm {draftDate} at {draftSlot}
+                </button>
+              </div>
             </section>
           )}
         </main>
