@@ -122,6 +122,10 @@ svg {
   overflow-wrap: anywhere;
 }
 
+.site-header h1 > span {
+  display: block;
+}
+
 .site-nav {
   min-width: 0;
   flex: 0 0 auto;

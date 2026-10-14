@@ -28,7 +28,7 @@ type NotaryType = 'affidavit' | 'loan' | 'poa'
 type MainTab = 'home' | 'docs' | 'notary' | 'help'
 type StatusTarget = 'home' | 'docs' | 'notary' | 'help'
 type NotaryStep = 'overview' | 'verify' | 'session' | 'receipt'
-type SitePage = 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'videoAppendix' | 'methodology' | 'findings' | 'datasets'
+type SitePage = 'about' | 'strategy' | 'mvp' | 'architecture' | 'appendix' | 'videoAppendix' | 'methodology' | 'findings' | 'datasets'
 type ArchitectureRecommendationId = 'lounge' | 'surround' | 'atm' | 'queue'
 type ChatMessage = {
   id: number
@@ -356,6 +356,7 @@ function getHfcuWorkerReply(question: string, request: (typeof requests)[Request
 function getSitePage(): SitePage {
   const hash = window.location.hash.replace(/^#\/?/, '')
 
+  if (hash === 'about') return 'about'
   if (hash === 'mvp') return 'mvp'
   if (hash === 'branch-architecture') return 'architecture'
   if (hash === 'appendix') return 'appendix'
@@ -571,9 +572,10 @@ function App() {
     <div className="site-shell">
       <header className="site-header">
         <div>
-          <h1>Harvard Federal Credit Union: Cambridge Branch Service Redesign</h1>
+          <h1><span>Harvard Federal Credit Union:</span><span>Cambridge Branch Service Redesign</span></h1>
         </div>
         <nav className="site-nav" aria-label="Project pages">
+          <a className={sitePage === 'about' ? 'is-active' : ''} href="#/about">About the Project</a>
           <a className={sitePage === 'methodology' ? 'is-active' : ''} href="#/traffic-methodology">Methodology</a>
           <a className={sitePage === 'findings' ? 'is-active' : ''} href="#/key-findings">Key findings</a>
           <a className={['strategy', 'mvp', 'architecture'].includes(sitePage) ? 'is-active' : ''} href="#/">Recommendations</a>
@@ -583,6 +585,51 @@ function App() {
       </header>
 
       <main className="site-main">
+        {sitePage === 'about' && (
+          <section className="research-content research-findings" aria-label="About the project">
+            <div className="section-heading">
+              <span className="page-label">About the Project</span>
+              <h2>An individual reengineering course project</h2>
+              <p>This project examines customer-facing operations at Harvard Federal Credit Union's Harvard Square branch, connecting service processes, digital support and the physical branch environment.</p>
+            </div>
+            <section className="research-section">
+              <h3>Why this project</h3>
+              <p>I chose this individual reengineering project because I experienced several of these service challenges myself, first as an international student preparing to arrive in the United States and later as a customer at the Harvard Square branch.</p>
+            </section>
+            <section className="research-section">
+              <h3>Banking before arriving in the United States</h3>
+              <p>Before arriving, I needed to open a bank account and settle the banking arrangements for my grants and loans. Having to sign documents in front of a notary made this difficult from overseas and added anxiety about my financial readiness before I had even reached the university.</p>
+              <p>That experience motivated the remote-notary component of this project. Given Harvard's international student community, notarization should be easier to navigate from abroad, with clear document requirements, appointment options and guidance on which steps can be completed remotely.</p>
+            </section>
+            <section className="research-section">
+              <h3>Waiting without reaching a service desk</h3>
+              <p>During busy visits to the Harvard Square branch, I observed queues that appeared poorly organized and saw people leave in frustration before receiving service. They did not even reach a staff member to raise their concerns.</p>
+              <p>These observations prompted questions about routing, waiting visibility and customers leaving before service. They are personal observations, not a measured abandonment rate.</p>
+            </section>
+            <section className="research-section">
+              <h3>Digital friction that brings customers back to the branch</h3>
+              <p>I found the banking app difficult to navigate, slow and dated, particularly around login and customer support. The analysis of low-rated HFCU Yelp reviews identified related themes involving digital channels, communication and resolution. Those themes support further investigation, although a digital mention alone does not establish a failure.</p>
+              <p>A personal interview at the branch added another perspective. Kathleen McDermott, who had recently retired, described an unsatisfactory HFCU banking experience, with proximity to her workplace at Harvard University Press (HUP) as a convenience. She raised concerns about both branch queues and the digital experience, explaining that difficulty banking online or on mobile led her to visit the branch instead.</p>
+              <p>Her account illustrates a possible connection between digital friction and in-person demand. It is one customer's experience, not a representative finding about all members.</p>
+            </section>
+            <section className="research-section">
+              <h3>A nearby comparison: Cambridge Savings Bank</h3>
+              <p>Cambridge Savings Bank provided a local community-banking comparison. Its favorable review narratives, renovated branch environment and ITM offering drew my attention to possible alternatives for HFCU. Its floor plan also suggested ways to organize waiting and service more clearly.</p>
+              <p>The compiled CSB dataset and branch reference materials inform those possibilities. Because the review sources and locations differ, they do not establish that CSB has better overall reviews, shorter waits or superior queue management. The ITM and layout are benchmarks for potential pilots, rather than proof of an operational advantage.</p>
+            </section>
+            <section className="research-section">
+              <h3>The reengineering question</h3>
+              <p>How can the branch resolve customer requests more reliably, reduce avoidable handoffs and improve the connection between in-person and digital service?</p>
+            </section>
+            <section className="research-section">
+              <h3>Course application</h3>
+              <p>The analysis applies service blueprinting, Lean service, queueing and facility-layout concepts to reviews, observations and a conceptual floor plan. Recommendations are framed as pilots with measurable outcomes.</p>
+            </section>
+            <div className="methodology-links">
+              <a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a>
+            </div>
+          </section>
+        )}
         {sitePage === 'strategy' && <ResearchContent page="strategy" />}
 
         {sitePage === 'appendix' && (
