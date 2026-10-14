@@ -622,7 +622,7 @@ function App() {
             </section>
             <section className="research-section">
               <h3>Course application</h3>
-              <p>The analysis applies service blueprinting, Lean service, queueing and facility-layout concepts to reviews, observations and a conceptual floor plan. Recommendations are framed as pilots with measurable outcomes.</p>
+              <p>The analysis applies queueing and facility-layout concepts, and quality management to reviews, observations and a conceptual floor plan. Recommendations are framed as pilots with measurable outcomes.</p>
             </section>
             <div className="methodology-links">
               <a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a>

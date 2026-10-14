@@ -124,8 +124,8 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
   if (page === 'findings') return <section className="research-findings research-content findings-focused">
     <div className="section-heading"><span className="page-label">Key findings</span><h2>Findings from reviews and branch observations</h2><p>The analysis identifies concerns about service continuity, customer routing and entrance circulation. Each finding is presented with its supporting evidence and limitations.</p></div>
     <div className="findings-numbers" aria-label="Evidence at a glance">
-      <div><strong>13 / 39</strong><span>low-rated reviews mention paperwork</span><small>Mentions, not confirmed rework</small></div>
-      <div><strong>2.5x</strong><span>observed Friday lunch arrival rate</span><small>Compared with sampled Mon-Thu afternoons</small></div>
+      <div><strong>53.8%</strong><span>digital-related mentions</span><small>21 of 39 low-rated reviews; not necessarily failures</small></div>
+      <div><strong>25.6%</strong><span>waiting / delays mentions</span><small>10 of 39 low-rated reviews; includes non-branch delays</small></div>
       <div><strong>ATM queue</strong><span>observed near the entrance</span><small>Observed circulation conflict; impact unmeasured</small></div>
     </div>
     <section className="research-section"><h3>The review evidence</h3><p>Frequency of coded themes in 39 reviews rated 1-2 stars.</p>
