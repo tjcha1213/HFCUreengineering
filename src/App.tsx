@@ -637,7 +637,7 @@ function App() {
           <div className="section-heading">
             <span className="page-label">Appendix</span>
             <h2>Research appendix</h2>
-            <p>The appendix keeps the supporting research materials separate from the main recommendations: observation videos, structured datasets, and the rationale evidence index.</p>
+            <p>The appendix brings together observation videos, HFCU and CSB review datasets, and supporting research materials.</p>
           </div>
 
           <div className="dataset-grid">
@@ -648,7 +648,7 @@ function App() {
             </article>
             <article>
               <strong>Datasets</strong>
-              <p>Customer arrival counts, the compiled Cambridge Savings Bank review dataset, and the evidence index behind the reengineering rationales.</p>
+              <p>HFCU and Cambridge Savings Bank review datasets, CSB source details, and the failure-matrix chart.</p>
               <a className="site-action secondary-site-action" href="#/datasets">Open datasets</a>
             </article>
           </div>
@@ -699,16 +699,6 @@ function App() {
           </div>
 
           <div className="dataset-grid">
-            <article>
-              <strong>Customer arrival observations</strong>
-              <p>Manual entrance and exit counts by observation day, duration, and calculated arrival rate.</p>
-              <a className="site-action secondary-site-action" href={`${assetBase}datasets/customer-arrival-observations.csv`} target="_blank" rel="noreferrer">Open CSV</a>
-            </article>
-            <article>
-              <strong>Rationale evidence index</strong>
-              <p>Index connecting each major recommendation to the supporting evidence page, asset, or observation source.</p>
-              <a className="site-action secondary-site-action" href={`${assetBase}datasets/rationale-evidence-index.csv`} target="_blank" rel="noreferrer">Open CSV</a>
-            </article>
             <article>
               <strong>Compiled CSB review dataset</strong>
               <p>24 curated Cambridge Savings Bank narratives across sources and locations: 17 positive, 4 negative, 2 mixed and 1 neutral. Used as a qualitative service-practice benchmark, not a representative comparison of bank performance.</p>
