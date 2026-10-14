@@ -30,7 +30,7 @@ const observations = [
 
 const findings = [
   ['Customer reviews', 'Communication and follow-through', 'Communication, repeat contact and handoffs recur in low-rated reviews. A shared case record could make the next step clearer.', '8/39 communication; 5/39 resolution failure; 4/39 repeat contact; 3/39 handoffs. Codes overlap. These counts do not establish population incidence or confirm every interaction occurred at this branch.'],
-  ['Customer reviews', 'Document-related review themes', 'Documents appear in one-third of the low-rated reviews. Clear acceptance status is a practical improvement to test.', '13 of 39 reviews mention documents or paperwork. Manual audit is needed to distinguish routine references from actual rework or resubmissions.'],
+  ['Customer reviews', 'Document and digital-related review themes', 'Documents or paperwork appear in 13 of 39 low-rated reviews (33.3%); digital-related mentions appear in 21 (53.8%). These themes inform clearer document status and digital support.', 'The document and digital categories overlap and should not be added together. Digital mentions include ordinary technology references, not only confirmed failures. Manual audit is needed to distinguish routine paperwork references from actual rework or resubmissions.'],
   ['Video observations', 'Variation in observed arrival rates', 'The observed Friday lunch arrival rate was roughly 2.5 times the pooled afternoon rate. Differences in service duration may also affect routing needs.', '42.6 entrants/hour at Friday lunch versus 17.3/hour across Monday-Thursday afternoons; 22.4/hour pooled. Day and time of day are confounded. Four teller stations and six offices do not establish active staffing or a capacity shortfall.'],
   ['Branch observations', 'ATM queueing near the entrance', 'Observed ATM queues can encroach on the entrance. Separating waiting space from the entry path is a candidate for a targeted layout trial.', 'Video and branch observations support a circulation hypothesis. Blockage frequency and duration remain unmeasured; the floor plan is conceptual.'],
   ['Local benchmark', 'CSB video banking as a comparison', 'CSB offers a local example of an ITM with live video bankers. It is a possible channel for eligible transactions outside the vestibule.', 'The official CSB Harvard Square listing confirms the channel. Its curated reviews offer practice examples, not proof of shorter waits, lower costs or superior service.'],
@@ -128,6 +128,15 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
       <div><strong>2.5x</strong><span>observed Friday lunch arrival rate</span><small>Compared with sampled Mon-Thu afternoons</small></div>
       <div><strong>ATM queue</strong><span>observed near the entrance</span><small>Observed circulation conflict; impact unmeasured</small></div>
     </div>
+    <section className="research-section"><h3>The review evidence</h3><p>Frequency of coded themes in 39 reviews rated 1-2 stars.</p>
+    <figure className="failure-matrix-figure">
+      <a href={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} target="_blank" rel="noreferrer" aria-label="Open full-size HFCU failure matrix chart">
+        <img src={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} alt="HFCU failure matrix: digital-related mentions 21 of 39 low-rated reviews, documents 13, waiting 10, communication and staff behavior 8 each. Other coded themes and proposed operational responses are shown." />
+      </a>
+      <figcaption>Preliminary overlapping themes in 39 reviews rated 1-2 stars. Digital mentions are not necessarily failures; proposed responses are hypotheses, not observed effects.</figcaption>
+      <div className="action-row"><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open source review spreadsheet</a></div>
+    </figure>
+    </section>
     <div className="finding-takeaways">{findings.map(([source, title, takeaway], index) => <button className="finding-card" type="button" key={title} onClick={() => setSelectedFinding(index)} aria-haspopup="dialog">
       <span className="finding-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
       <span className="finding-card-copy"><span className="research-evidence-label">{source}</span><strong className="finding-card-title">{title}</strong><span>{takeaway}</span></span>
@@ -141,19 +150,13 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
         <p>{findings[selectedFinding][2]}</p>
         {selectedFinding === 3 && <video controls playsInline preload="metadata" poster={`${import.meta.env.BASE_URL}architecture/atm-queue-thumb.jpg`} src={`${import.meta.env.BASE_URL}architecture/atm-queue-pressure.mp4`} aria-label="Observed ATM queue pressure" />}
         <h4>Evidence and limits</h4><p>{findings[selectedFinding][3]}</p>
-        {selectedFinding === 4 && <a className="site-action secondary-site-action" href="https://www.cambridgesavings.com/locations/cambridge-harvard-square-0" target="_blank" rel="noreferrer">CSB Harvard Square services</a>}
+        {selectedFinding === 4 && <figure className="failure-matrix-figure">
+          <img src={`${import.meta.env.BASE_URL}architecture/csb-waiting-area.png`} alt="Cambridge Savings Bank interior with lounge seating and visible service desks" />
+          <figcaption>CSB branch interior reference, also used in the architecture comparison. This photo illustrates the waiting area and service layout, not an ITM.</figcaption>
+        </figure>}
       </div>
     </dialog>}
     <div className="findings-conclusion"><h3>Implications for service redesign</h3><p>The findings support testing case ownership, service triage and entrance circulation changes before considering major renovation. They do not establish broad understaffing.</p><a className="site-action primary-site-action" href="#/">Explore recommendations</a></div>
-    <section className="research-section"><h3>The review evidence</h3><p>Frequency of coded themes in 39 reviews rated 1-2 stars.</p>
-    <figure className="failure-matrix-figure">
-      <a href={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} target="_blank" rel="noreferrer" aria-label="Open full-size HFCU failure matrix chart">
-        <img src={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} alt="HFCU failure matrix: digital-related mentions 21 of 39 low-rated reviews, documents 13, waiting 10, communication and staff behavior 8 each. Other coded themes and proposed operational responses are shown." />
-      </a>
-      <figcaption>Preliminary overlapping themes in 39 reviews rated 1-2 stars. Digital mentions are not necessarily failures; proposed responses are hypotheses, not observed effects.</figcaption>
-      <div className="action-row"><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open source review spreadsheet</a></div>
-    </figure>
-    </section>
     <div className="findings-actions"><a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a><a className="site-action secondary-site-action" href="#/">Open recommendations</a><a className="site-action secondary-site-action" href="#/datasets">Open datasets</a></div>
   </section>
 
@@ -167,11 +170,5 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
       <div><span className="research-evidence-label">{group.priority === 'P1' ? 'First priority' : group.priority === 'P2' ? 'Next-stage pilots' : 'After evaluation'}</span><h3>{group.heading}</h3><p>{group.description}</p></div>
       <div className="recommendation-grid">{interventions.filter(item => item[0] === group.priority).map(([, title, framework, mechanism, pilot, measures]) => <article key={title}><h4>{title}</h4><p>{mechanism}</p><details><summary>Pilot and measures</summary><p><b>Pilot: </b>{pilot}</p><p><b>Measure: </b>{measures}</p><p><b>Operations framework: </b>{framework}</p></details></article>)}</div>
     </section>)}
-    <p className="methodology-caveat">These are proposed pilots. The MVP demonstrates the workflow; improvements in service and waiting times still need to be measured.</p>
-    <details className="recommendation-technical"><summary>Queueing analysis and evaluation</summary>
-    <section className="research-section"><h3>Evaluate queues by service class</h3><p>The pooled 22.4 entrants/hour is a branch-level rate, not the arrival rate of one four-server teller queue. Measure each class's arrival share and active servers first.</p><div className="research-equations"><p>Utilization: rho(j) = lambda(j) / [s(j) x mu(j)]</p><p>Service rate: mu(j) = 60 / mean service minutes for class j</p><p>Little's Law, for an approximately stable system: Lq(j) = lambda(j) x Wq(j)</p></div><p>Here lambda is arrivals per hour, s is active servers, mu is services per server-hour, Lq is average queue length and Wq is average waiting time in hours. Assess variability and queue discipline before choosing an M/M/s model or projecting exact wait reductions.</p></section>
-    <section className="research-section"><h3>Phased implementation</h3><ol className="research-phases"><li><strong>Baseline.</strong> Audit frequent review codes; timestamp a small nonidentifying sample of arrivals, queues, service times and ATM obstruction at matched time slots.</li><li><strong>Process pilots.</strong> Test service-reason check-in, named ownership and shared document/status records. Compare resolution, repeat contacts and waits with baseline.</li><li><strong>Space and technology pilots.</strong> Move ATM waiting out of circulation. Test remote assistance or an ITM only when volumes, costs, permissions and accessibility support it.</li><li><strong>Evaluate and scale.</strong> Compare service levels, workload, customer effort and cost. Revisit floor-plan changes when causal evidence supports them.</li></ol></section>
-    </details>
-    <Benchmark />
   </section>
 }
