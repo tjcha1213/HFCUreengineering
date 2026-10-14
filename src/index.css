@@ -2444,6 +2444,47 @@ svg {
 .failure-matrix-figure img { display: block; width: 100%; height: auto; cursor: zoom-in; }
 .failure-matrix-figure figcaption { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 
+.research-findings.findings-focused { background: transparent; border: 0; box-shadow: none; border-radius: 0; }
+.findings-focused .section-heading h2 { font-size: 2rem; line-height: 1.2; }
+.findings-numbers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid var(--line); }
+.findings-numbers > div { display: grid; align-content: start; gap: 8px; padding: 24px 20px; border-top: 3px solid var(--crimson); }
+.findings-numbers > div:nth-child(2) { border-top-color: #24735d; }
+.findings-numbers > div:nth-child(3) { border-top-color: #a36e13; }
+.findings-numbers strong { color: var(--crimson); font-size: 2rem; line-height: 1.15; overflow-wrap: anywhere; }
+.findings-numbers > div:nth-child(2) strong { color: #24735d; }
+.findings-numbers > div:nth-child(3) strong { color: #80540a; }
+.findings-numbers span { font-weight: 700; }
+.findings-numbers small { color: var(--muted); line-height: 1.5; }
+.finding-takeaways { display: grid; gap: 12px; }
+.finding-card { display: grid; grid-template-columns: 48px minmax(0, 1fr) 20px; gap: 18px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: white; text-align: left; color: var(--ink); width: 100%; }
+.finding-card:hover { border-color: var(--crimson); background: #fffafb; }
+.finding-card:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
+.finding-card-copy { display: grid; gap: 8px; line-height: 1.6; }
+.finding-card-title { font-size: 1.3rem; line-height: 1.3; }
+.finding-dialog { margin: auto; padding: 0; width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: white; overflow-y: auto; }
+.finding-dialog::backdrop { background: rgba(20, 25, 23, 0.65); }
+.finding-dialog-content { position: relative; display: grid; gap: 16px; padding: 28px; }
+.finding-dialog-content h3 { padding-right: 32px; font-size: 1.4rem; }
+.finding-dialog-content p { line-height: 1.65; }
+.finding-dialog-content video, .finding-dialog-content img { width: 100%; max-height: 420px; object-fit: contain; background: #f3f3f3; }
+.finding-dialog-close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: var(--ink); background: #f3f3f3; }
+.finding-dialog-content > a { justify-self: start; }
+.finding-number { color: var(--crimson); font-size: 1.5rem; font-weight: 800; }
+.finding-takeaways h3 { font-size: 1.3rem; line-height: 1.3; margin-bottom: 8px; }
+.finding-takeaways .research-evidence-label { margin-bottom: 6px; }
+.finding-takeaways summary { cursor: pointer; color: var(--crimson); font-weight: 700; padding-block: 12px; }
+.finding-takeaways details p { color: var(--muted); font-size: 0.9rem; }
+.findings-conclusion { display: grid; justify-items: start; gap: 12px; padding-block: 20px; }
+.findings-conclusion h3 { font-size: 1.5rem; }
+@media (max-width: 600px) {
+  .findings-numbers { grid-template-columns: 1fr; }
+  .findings-numbers > div { padding: 16px 0; }
+  .findings-numbers strong { font-size: 1.75rem; }
+  .finding-card { grid-template-columns: 24px minmax(0, 1fr) 18px; gap: 10px; padding: 16px; }
+  .finding-dialog-content { padding: 22px; }
+  .findings-focused .section-heading h2 { font-size: 1.65rem; }
+}
+
 .methodology-simple .methodology-overview {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

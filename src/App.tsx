@@ -580,7 +580,6 @@ function App() {
           <a className={sitePage === 'findings' ? 'is-active' : ''} href="#/key-findings">Key findings</a>
           <a className={['strategy', 'mvp', 'architecture'].includes(sitePage) ? 'is-active' : ''} href="#/">Recommendations</a>
           <a className={['appendix', 'videoAppendix', 'datasets'].includes(sitePage) ? 'is-active' : ''} href="#/appendix">Appendix</a>
-          <a href="https://github.com/tjcha1213/HFCUreengineering" target="_blank" rel="noreferrer">GitHub repo</a>
         </nav>
       </header>
 

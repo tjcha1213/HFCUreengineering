@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
+import { ArrowUpRight, X } from 'lucide-react'
+
 const datasetBase = `${import.meta.env.BASE_URL}datasets/`
 
 const themes = [
@@ -26,11 +29,11 @@ const observations = [
 ]
 
 const findings = [
-  ['Review-backed concern', 'Process continuity and exception resolution', 'Communication 8/39; resolution failure 5/39; repeat contact 4/39; handoffs 3/39, plus supplementary HFCU narratives.', 'Case ownership and follow-through are promising targets. Precise incidence and branch attribution remain unestablished.'],
-  ['Possible mechanism', 'Document rework and unclear status', 'Documents or paperwork appear in 13 of the 39 low-rated reviews.', 'Audit the mentions to distinguish actual resubmissions from routine paperwork references.'],
-  ['Measured arrival variation', 'Demand peaks and different service needs', '22.4 entrants/hour pooled; 17.3/hour in sampled afternoons; 42.6/hour during Friday lunch. Interviews suggest longer officer consultations.', 'Capacity shortfall is unproven. Four teller stations and six officer offices are physical positions, not confirmed active servers.'],
-  ['Spatial hypothesis', 'ATM queues can interfere with the entrance', 'Branch observations and video show queues encroaching on the narrow two-door vestibule.', 'Measure blockage duration and frequency. This is stronger spatial evidence than the two layout mentions in low-rated reviews.'],
-  ['Qualitative benchmark', 'CSB offers practices worth testing', 'Selected reviews describe follow-through; its official Harvard Square page documents an ITM/video-banker channel.', 'These are examples and evidence of channel feasibility, not proof that CSB has shorter waits, lower costs or superior resolution.'],
+  ['Customer reviews', 'A request needs an owner.', 'Communication, repeat contact and handoffs recur in low-rated reviews. A shared case record could make the next step clearer.', '8/39 communication; 5/39 resolution failure; 4/39 repeat contact; 3/39 handoffs. Codes overlap. These counts do not establish population incidence or confirm every interaction occurred at this branch.'],
+  ['Customer reviews', 'Paperwork is a recurring friction point.', 'Documents appear in one-third of the low-rated reviews. Clear acceptance status is a practical improvement to test.', '13 of 39 reviews mention documents or paperwork. Manual audit is needed to distinguish routine references from actual rework or resubmissions.'],
+  ['Video observations', 'Demand changes. Routing should respond.', 'Friday lunch brought roughly 2.5 times the arrivals seen in the sampled afternoons. Short transactions and long consultations may need different routes.', '42.6 entrants/hour at Friday lunch versus 17.3/hour across Monday-Thursday afternoons; 22.4/hour pooled. Day and time of day are confounded. Four teller stations and six offices do not establish active staffing or a capacity shortfall.'],
+  ['Branch observations', 'The ATM queue meets the front door.', 'Observed ATM queues can encroach on the entrance. Separating waiting space from the entry path is the clearest layout priority to test.', 'Video and branch observations support a circulation hypothesis. Blockage frequency and duration remain unmeasured; the floor plan is conceptual.'],
+  ['Local benchmark', 'Video banking is already nearby.', 'CSB offers a local example of an ITM with live video bankers. It is a possible channel for eligible transactions outside the vestibule.', 'The official CSB Harvard Square listing confirms the channel. Its curated reviews offer practice examples, not proof of shorter waits, lower costs or superior service.'],
 ]
 
 const interventions = [
@@ -61,6 +64,19 @@ function Benchmark() {
 }
 
 export default function ResearchContent({ page }: { page: 'methodology' | 'findings' | 'strategy' }) {
+  const [selectedFinding, setSelectedFinding] = useState<number | null>(null)
+  const findingDialog = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    const dialog = findingDialog.current
+    if (selectedFinding === null || !dialog) return
+    dialog.showModal()
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      dialog.close()
+      document.body.style.overflow = previousOverflow
+    }
+  }, [selectedFinding])
   if (page === 'methodology') return <section className="traffic-methodology research-content methodology-simple">
     <div className="section-heading"><span className="page-label">Methodology</span><h2>How the branch was studied</h2><p>Customer reviews, video observations and branch visits informed the proposed service improvements.</p></div>
     <div className="methodology-overview">
@@ -81,7 +97,7 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     ]} />
     <p>HFCU Yelp listing association does not establish an actual branch visit. CSB narratives span platforms, locations and digital banking and may not be original branch-specific postings. Their percentages cannot establish population failure rates or relative bank performance. Supplementary HFCU narratives remain separate.</p>
     <ResearchTable caption="Preliminary themes in 39 reviews rated 1-2 stars" headings={['Theme', 'Reviews', 'Share of 39']} rows={themes} />
-    <a className="section-inline-link" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open HFCU review spreadsheet</a>
+    <div className="action-row"><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open HFCU review spreadsheet</a></div>
     <p className="research-callout">Codes overlap and require manual audit. Digital mentions include ordinary technology references: 53.8% is not a digital failure rate. Waiting includes callbacks and other non-branch delays. Example wording from a matrix graphic is not a verbatim source quotation.</p>
     </div></details>
     <details><summary><span>Customer traffic<small>Five weekday recordings and arrival-rate calculations</small></span></summary><div className="methodology-detail-body">
@@ -105,17 +121,39 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     <div className="methodology-links"><a className="site-action primary-site-action" href="#/key-findings">Key findings</a><a className="site-action secondary-site-action" href="#/video-appendix">Supporting videos</a></div>
   </section>
 
-  if (page === 'findings') return <section className="research-findings research-content">
-    <div className="section-heading"><span className="page-label">Key findings</span><h2>Candidate bottlenecks and strength of evidence</h2><p>The strongest current diagnosis is fragmented service continuity plus potentially inefficient routing of short versus complex transactions.</p></div>
+  if (page === 'findings') return <section className="research-findings research-content findings-focused">
+    <div className="section-heading"><span className="page-label">Key findings</span><h2>Clearer next steps. Better service flow.</h2><p>The evidence points to three priorities: own the request, route the customer, and keep the entrance clear.</p></div>
+    <div className="findings-numbers" aria-label="Evidence at a glance">
+      <div><strong>13 / 39</strong><span>low-rated reviews mention paperwork</span><small>Mentions, not confirmed rework</small></div>
+      <div><strong>2.5x</strong><span>observed Friday lunch arrival rate</span><small>Compared with sampled Mon-Thu afternoons</small></div>
+      <div><strong>One entrance</strong><span>shared with the ATM queue</span><small>Observed circulation conflict; impact unmeasured</small></div>
+    </div>
+    <div className="finding-takeaways">{findings.map(([source, title, takeaway], index) => <button className="finding-card" type="button" key={title} onClick={() => setSelectedFinding(index)} aria-haspopup="dialog">
+      <span className="finding-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+      <span className="finding-card-copy"><span className="research-evidence-label">{source}</span><strong className="finding-card-title">{title}</strong><span>{takeaway}</span></span>
+      <ArrowUpRight size={20} aria-hidden="true" />
+    </button>)}</div>
+    {selectedFinding !== null && <dialog className="finding-dialog" ref={findingDialog} aria-labelledby="finding-dialog-title" onCancel={() => setSelectedFinding(null)} onClose={() => setSelectedFinding(null)} onClick={event => { if (event.target === event.currentTarget) setSelectedFinding(null) }}>
+      <div className="finding-dialog-content">
+        <button className="finding-dialog-close" type="button" aria-label="Close finding" title="Close finding" onClick={() => setSelectedFinding(null)}><X size={22} /></button>
+        <span className="research-evidence-label">{findings[selectedFinding][0]}</span>
+        <h3 id="finding-dialog-title">{findings[selectedFinding][1]}</h3>
+        <p>{findings[selectedFinding][2]}</p>
+        {selectedFinding === 3 && <video controls playsInline preload="metadata" poster={`${import.meta.env.BASE_URL}architecture/atm-queue-thumb.jpg`} src={`${import.meta.env.BASE_URL}architecture/atm-queue-pressure.mp4`} aria-label="Observed ATM queue pressure" />}
+        <h4>Evidence and limits</h4><p>{findings[selectedFinding][3]}</p>
+        {selectedFinding === 4 && <a className="site-action secondary-site-action" href="https://www.cambridgesavings.com/locations/cambridge-harvard-square-0" target="_blank" rel="noreferrer">CSB Harvard Square services</a>}
+      </div>
+    </dialog>}
+    <div className="findings-conclusion"><h3>Fix the process first.</h3><p>Test case ownership, service triage and a clear entrance before committing to major renovation. The evidence does not establish broad understaffing.</p><a className="site-action primary-site-action" href="#/">Explore recommendations</a></div>
+    <section className="research-section"><h3>The review evidence</h3><p>Frequency of coded themes in 39 reviews rated 1-2 stars.</p>
     <figure className="failure-matrix-figure">
       <a href={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} target="_blank" rel="noreferrer" aria-label="Open full-size HFCU failure matrix chart">
         <img src={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} alt="HFCU failure matrix: digital-related mentions 21 of 39 low-rated reviews, documents 13, waiting 10, communication and staff behavior 8 each. Other coded themes and proposed operational responses are shown." />
       </a>
       <figcaption>Preliminary overlapping themes in 39 reviews rated 1-2 stars. Digital mentions are not necessarily failures; proposed responses are hypotheses, not observed effects.</figcaption>
-      <a className="section-inline-link" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open source review spreadsheet</a>
+      <div className="action-row"><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open source review spreadsheet</a></div>
     </figure>
-    <div className="findings-grid">{findings.map(([confidence, title, evidence, interpretation]) => <article key={title}><span className="research-evidence-label">{confidence}</span><strong>{title}</strong><p>{evidence}</p><p>{interpretation}</p></article>)}</div>
-    <p className="research-callout">ATM queueing in the entry vestibule is the most actionable architectural issue. The data do not establish broad understaffing or demonstrate that a wholesale renovation would improve outcomes.</p>
+    </section>
     <div className="findings-actions"><a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a><a className="site-action secondary-site-action" href="#/">Open recommendations</a><a className="site-action secondary-site-action" href="#/datasets">Open datasets</a></div>
   </section>
 
