@@ -1,4 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react'
+import ResearchContent from './ResearchContent'
 import {
   Bell,
   CalendarClock,
@@ -219,7 +220,7 @@ const architectureRecommendations: ArchitectureRecommendation[] = [
   {
     id: 'lounge',
     title: 'Recenter the lounge',
-    body: 'Move the waiting area closer to the service core so customers are visible to tellers and office staff, and staff are more visible to waiting customers.',
+    body: 'P3 hypothesis: trial a lounge closer to the service core, then measure sightlines, walking routes and waiting footprint before committing to permanent changes.',
     overlays: [
       {
         label: 'Proposed visible lounge core',
@@ -236,7 +237,7 @@ const architectureRecommendations: ArchitectureRecommendation[] = [
   {
     id: 'surround',
     title: 'Surround waiting with service points',
-    body: 'Arrange teller stands and offices around the lounge rather than leaving the lounge isolated by the street-facing windows.',
+    body: 'P3 hypothesis: test staff-to-lounge sightlines and seated interactions for longer consultations. Validate service routes and furniture changes before considering partition removal.',
     overlays: [
       {
         label: 'Teller visibility edge',
@@ -570,8 +571,7 @@ function App() {
     <div className="site-shell">
       <header className="site-header">
         <div>
-          <p>HFCU Reengineering</p>
-          <h1>Cambridge Branch Service Redesign</h1>
+          <h1>Harvard Federal Credit Union: Cambridge Branch Service Redesign</h1>
         </div>
         <nav className="site-nav" aria-label="Project pages">
           <a className={sitePage === 'methodology' ? 'is-active' : ''} href="#/traffic-methodology">Methodology</a>
@@ -583,84 +583,7 @@ function App() {
       </header>
 
       <main className="site-main">
-        {sitePage === 'strategy' && (
-          <>
-        <section className="landing" aria-label="Cambridge branch reengineering overview">
-          <div className="landing-copy">
-            <span className="page-label">Cambridge branch reengineering</span>
-            <h2>Designing a clearer branch-to-digital service system</h2>
-            <p>
-              The Cambridge HFCU branch needs a redesigned operating flow that reduces member uncertainty,
-              separates simple status checks from staff-intensive work, and routes notarization and document
-              services into a cleaner digital handoff.
-            </p>
-            <div className="action-row">
-              <a className="site-action primary-site-action" href="#/mvp">View MVP</a>
-              <a className="site-action secondary-site-action" href="#/branch-architecture">Branch architecture</a>
-            </div>
-          </div>
-
-          <div className="landing-insights" aria-label="Why reengineering is needed">
-            <div>
-              <strong>Queue opacity</strong>
-              <span>Members often need staff help just to understand wait status, next step, or missing documents.</span>
-            </div>
-            <div>
-              <strong>Service mixing</strong>
-              <span>Routine questions, notarization prep, lending review, and branch visits compete for the same attention.</span>
-            </div>
-            <div>
-              <strong>Digital handoff gap</strong>
-              <span>The app can absorb status, readiness, scheduling, and document guidance before a member reaches staff.</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="prototype-objective">
-          <div>
-            <h2>Prototype Objective</h2>
-            <p>Reduce service uncertainty by giving Cambridge branch members a clear app-based path for request status, document readiness, remote notarization, and support escalation.</p>
-          </div>
-          <div>
-            <span>Target outcome</span>
-            <strong>Fewer status calls, clearer digital completion</strong>
-          </div>
-        </section>
-        <section className="recommendations" aria-label="Analytical reasoning and recommendations">
-          <div className="section-heading">
-            <span className="page-label">Analytical reasoning</span>
-            <h2>Pain point resolutions</h2>
-            <p>The reengineering proposal separates avoidable uncertainty from work that genuinely needs staff attention.</p>
-          </div>
-          <div className="recommendation-grid">
-            <article>
-              <strong>1. Make queue status self-service</strong>
-              <p>Members should be able to see wait stage, ETA, and next action without asking branch staff. This reduces front-desk interruption and lowers perceived wait time.</p>
-            </article>
-            <article>
-              <strong>2. Move document readiness before arrival</strong>
-              <p>Missing documents should surface before the member reaches a specialist. The app should show exactly what is missing and whether a visit can proceed.</p>
-            </article>
-            <article>
-              <strong>3. Split simple service from specialist work</strong>
-              <p>Fast teller transactions, loan review, notarization, and escalations should have separate routing so members do not wait in one ambiguous queue.</p>
-            </article>
-            <article>
-              <strong>4. Add remote notarization as a guided workflow</strong>
-              <p>Identity verification, document upload, appointment selection, and receipt delivery can be handled as a structured digital sequence.</p>
-            </article>
-            <article>
-              <strong>5. Use the branch as a visibility system</strong>
-              <p>Interior cues, queue displays, and desk zoning should help members understand where to go and why they are waiting.</p>
-            </article>
-            <article>
-              <strong>6. Preserve human support for exceptions</strong>
-              <p>The app should not replace staff. It should reduce repetitive clarification so staff can focus on complex cases and relationship-building.</p>
-            </article>
-          </div>
-        </section>
-          </>
-        )}
+        {sitePage === 'strategy' && <ResearchContent page="strategy" />}
 
         {sitePage === 'appendix' && (
         <section className="research-datasets" aria-label="Research appendix">
@@ -716,173 +639,9 @@ function App() {
         </section>
         )}
 
-        {sitePage === 'methodology' && (
-        <section className="traffic-methodology" aria-label="Customer arrival rate and daily traffic estimation methodology">
-          <div className="section-heading">
-            <span className="page-label">Research methodology</span>
-            <h2>Customer Arrival Rate and Daily Traffic Estimation</h2>
-            <p>Customer traffic at Harvard Federal Credit Union's Harvard Square branch was estimated using five weekday video observations. The recordings support a preliminary arrival-rate estimate for branch reengineering decisions.</p>
-          </div>
+        {sitePage === 'methodology' && <ResearchContent page="methodology" />}
 
-          <div className="methodology-summary">
-            <article>
-              <strong>Observation window</strong>
-              <p>Five recordings were reviewed from Monday through Friday. Each lasted approximately 20-25 minutes.</p>
-            </article>
-            <article>
-              <strong>Counting rule</strong>
-              <p>Customer entrances and exits were manually counted from the recordings. Pedestrians passing by the branch were excluded.</p>
-            </article>
-            <article>
-              <strong>Arrival-rate calculation</strong>
-              <p>The arrival rate (&lambda;) was calculated by dividing the number of entrances by the recording duration in hours.</p>
-            </article>
-          </div>
-
-          <div className="methodology-table-wrap">
-            <table className="methodology-table">
-              <caption>Observational results</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Day</th>
-                  <th scope="col">Approx. time</th>
-                  <th scope="col">Duration</th>
-                  <th scope="col">IN</th>
-                  <th scope="col">OUT</th>
-                  <th scope="col">&lambda; arrivals/hr</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Monday</th>
-                  <td>2:00-2:25 PM</td>
-                  <td>24:33</td>
-                  <td>12</td>
-                  <td>9</td>
-                  <td>29.3</td>
-                </tr>
-                <tr>
-                  <th scope="row">Tuesday</th>
-                  <td>2:30-2:50 PM</td>
-                  <td>19:42</td>
-                  <td>7</td>
-                  <td>6</td>
-                  <td>21.3</td>
-                </tr>
-                <tr>
-                  <th scope="row">Wednesday</th>
-                  <td>3:00-3:20 PM</td>
-                  <td>19:04</td>
-                  <td>4</td>
-                  <td>6</td>
-                  <td>12.6</td>
-                </tr>
-                <tr>
-                  <th scope="row">Thursday</th>
-                  <td>3:30-3:50 PM</td>
-                  <td>19:54</td>
-                  <td>1</td>
-                  <td>5</td>
-                  <td>3.0</td>
-                </tr>
-                <tr>
-                  <th scope="row">Friday</th>
-                  <td>12:10-12:30 PM</td>
-                  <td>21:07</td>
-                  <td>15</td>
-                  <td>14</td>
-                  <td>42.6</td>
-                </tr>
-                <tr className="table-total">
-                  <th scope="row">Total</th>
-                  <td>Five weekdays</td>
-                  <td>104:20</td>
-                  <td>39</td>
-                  <td>40</td>
-                  <td>22.4</td>
-                </tr>
-              </tbody>
-            </table>
-            <p className="table-note">Note: Monday-Thursday observation times are approximate assigned windows, not verified recording timestamps. Friday's observation time was reported directly. Arrival rates use the actual recording durations.</p>
-          </div>
-
-          <div className="calculation-grid">
-            <article>
-              <span>Pooled arrival rate</span>
-              <strong>&lambda;-hat = 39 / (104.33 / 60) = 22.4 arrivals/hour</strong>
-            </article>
-            <article>
-              <span>Estimated weekday traffic</span>
-              <strong>N-day = 22.4 x 8 = approximately 180 arrivals/day</strong>
-            </article>
-          </div>
-
-          <div className="methodology-columns">
-            <section aria-label="Key findings">
-              <h3>Key findings</h3>
-              <ul>
-                <li>Pooled arrival rate: 22.4 customers/hour, or approximately one arrival every 2.7 minutes.</li>
-                <li>Monday-Thursday afternoon arrival rate: approximately 17.3 customers/hour.</li>
-                <li>Friday lunchtime arrival rate: 42.6 customers/hour, approximately 2.5 times the observed afternoon rate.</li>
-                <li>Estimated average weekday traffic: approximately 180 branch entrances per day.</li>
-              </ul>
-            </section>
-
-            <section aria-label="Limitations">
-              <h3>Limitations</h3>
-              <p>The daily traffic figure is a preliminary extrapolation from five short, nonrandom observation periods rather than a directly measured daily average. Morning hours were not sampled, and Friday's lunchtime observation is not directly comparable with the Monday-Thursday afternoon observations. Consequently, differences in arrival rates may reflect time-of-day effects rather than weekday effects. The counts represent branch entrances, not unique customers or arrivals to individual service queues.</p>
-            </section>
-          </div>
-
-          <div className="methodology-links">
-            <a className="site-action primary-site-action" href="#/video-appendix">Open supporting videos</a>
-            <a className="site-action secondary-site-action" href="#/">Back to recommendations</a>
-          </div>
-        </section>
-        )}
-
-        {sitePage === 'findings' && (
-        <section className="research-findings" aria-label="HFCU reengineering key findings">
-          <div className="section-heading">
-            <span className="page-label">Key findings</span>
-            <h2>What the observations imply for branch redesign</h2>
-            <p>The findings connect customer arrival patterns, observed queue friction, and branch layout constraints to the MVP and physical architecture recommendations.</p>
-          </div>
-
-          <div className="findings-grid">
-            <article>
-              <strong>Traffic is high enough to make waiting visible</strong>
-              <p>The pooled arrival estimate is 22.4 customers/hour, or roughly one customer every 2.7 minutes during the sampled periods.</p>
-            </article>
-            <article>
-              <strong>Lunchtime demand appears materially heavier</strong>
-              <p>Friday lunchtime produced 42.6 arrivals/hour, approximately 2.5 times the Monday-Thursday afternoon rate observed in the study window.</p>
-            </article>
-            <article>
-              <strong>Current waiting visibility is weak</strong>
-              <p>The lounge placement is too far from the staff-facing service core, reducing shared visibility between waiting customers, tellers, and office staff.</p>
-            </article>
-            <article>
-              <strong>ATM flow can obstruct entry and exit</strong>
-              <p>The ATM location can create a line that behaves like a barrier near the entrance, so ATM traffic should be separated from the main arrival path.</p>
-            </article>
-            <article>
-              <strong>Digital status can absorb routine uncertainty</strong>
-              <p>The MVP should reduce repetitive status questions by showing queue stage, document readiness, wait context, and next actions before staff intervention.</p>
-            </article>
-            <article>
-              <strong>Seated interactions better match consultative service</strong>
-              <p>Standing teller windows should be complemented by seated or semi-seated service points for longer guidance, document review, and relationship-based support.</p>
-            </article>
-          </div>
-
-          <div className="findings-actions">
-            <a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a>
-            <a className="site-action secondary-site-action" href="#/">Open recommendations</a>
-            <a className="site-action secondary-site-action" href="#/datasets">Open datasets</a>
-          </div>
-        </section>
-        )}
+        {sitePage === 'findings' && <ResearchContent page="findings" />}
 
         {sitePage === 'datasets' && (
         <section className="research-datasets" aria-label="Research datasets and rationale evidence">
@@ -922,7 +681,7 @@ function App() {
           <div className="section-heading">
             <span className="page-label">Branch architecture recommendation</span>
             <h2>Interior changes for queue visibility and customer experience</h2>
-            <p>This page separates the physical branch recommendations from the MVP. The goal is to make queues, service zones, and staff handoffs more visible to members as soon as they enter.</p>
+            <p>Prioritize keeping ATM queues out of the entrance path. Lounge, seating and service-point changes are selective hypotheses to test after process pilots, not evidence that wholesale renovation is needed. This conceptual plan is not a measured as-built drawing.</p>
           </div>
 
           <div className="map-layout">

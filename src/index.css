@@ -2424,3 +2424,50 @@ svg {
     grid-template-columns: 1fr;
   }
 }
+.research-content { display: grid; gap: 24px; min-width: 0; }
+.research-content p { line-height: 1.65; overflow-wrap: anywhere; }
+.research-content .section-heading, .research-section { display: grid; gap: 12px; }
+.research-section { padding-block: 22px; border-top: 1px solid var(--line); }
+.research-callout { padding: 16px 20px; border-left: 4px solid var(--crimson); background: #f8f2f4; }
+.research-evidence-label { display: block; color: #6d3345; font-size: 0.78rem; font-weight: 750; margin-bottom: 10px; }
+.research-content article p + p { margin-top: 12px; }
+.research-content .methodology-table-wrap { max-width: 100%; min-width: 0; overflow-x: auto; }
+.research-content .methodology-table { white-space: normal; }
+.research-content .methodology-table th, .research-content .methodology-table td { vertical-align: top; white-space: normal; }
+.research-process, .research-phases { display: grid; gap: 14px; padding-left: 24px; line-height: 1.65; }
+.research-equations { padding: 16px; background: #eef5f1; overflow-wrap: anywhere; }
+
+.methodology-simple .methodology-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  padding-block: 20px;
+  border-block: 1px solid var(--line);
+}
+.methodology-overview > div { display: grid; gap: 6px; }
+.methodology-overview strong { font-size: 1.25rem; color: var(--crimson); }
+.methodology-overview span, .methodology-caveat { font-size: 0.88rem; color: var(--muted); }
+.methodology-details { min-width: 0; }
+.methodology-details details { border-bottom: 1px solid var(--line); }
+.methodology-details summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 750;
+}
+.methodology-details summary::-webkit-details-marker { display: none; }
+.methodology-details summary::after { content: '+'; font-size: 1.4rem; color: var(--crimson); }
+.methodology-details details[open] > summary::after { content: '-'; }
+.methodology-details summary small { display: block; margin-top: 5px; color: var(--muted); font-size: 0.85rem; font-weight: 400; }
+.methodology-details summary:focus-visible { outline: 2px solid var(--crimson); outline-offset: 4px; }
+.methodology-detail-body { display: grid; gap: 18px; padding-bottom: 24px; min-width: 0; }
+.methodology-detail-body .research-section { padding-block: 0; border: 0; }
+@media (max-width: 600px) {
+  .methodology-simple .methodology-overview { gap: 14px; }
+  .methodology-overview strong { font-size: 1rem; }
+  .methodology-overview span { font-size: 0.76rem; }
+}
