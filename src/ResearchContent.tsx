@@ -1,3 +1,5 @@
+const datasetBase = `${import.meta.env.BASE_URL}datasets/`
+
 const themes = [
   ['Digital-related mentions', '21', '53.8%'],
   ['Documents / paperwork', '13', '33.3%'],
@@ -7,8 +9,11 @@ const themes = [
   ['First-contact resolution failure', '5', '12.8%'],
   ['Repeated contact', '4', '10.3%'],
   ['Handoffs / escalation', '3', '7.7%'],
+  ['Amenities', '3', '7.7%'],
   ['Physical layout', '2', '5.1%'],
   ['Staffing capacity', '1', '2.6%'],
+  ['Third-party issues', '1', '2.6%'],
+  ['Privacy', '1', '2.6%'],
 ]
 
 const observations = [
@@ -60,6 +65,7 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     <div className="section-heading"><span className="page-label">Methodology</span><h2>How the branch was studied</h2><p>Customer reviews, video observations and branch visits informed the proposed service improvements.</p></div>
     <div className="methodology-overview">
       <div><strong>87 reviews</strong><span>HFCU customer experiences</span></div>
+      <div><strong>24 narratives</strong><span>Compiled CSB review dataset</span></div>
       <div><strong>5 recordings</strong><span>104 minutes of entrance activity</span></div>
       <div><strong>Branch visits</strong><span>Interviews and layout observations</span></div>
     </div>
@@ -69,12 +75,13 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     <ResearchTable caption="Evidence and sampling" headings={['Evidence', 'Scope and sample', 'Analytical use']} rows={[
       ['HFCU Harvard Square Yelp', '87 written records; 66 recoverable star scores; 39 rated 1-2 stars', 'Primary voice of customer and preliminary failure matrix'],
       ['Supplementary HFCU narratives', '14 accessible negative/mixed digital or institution-wide accounts', 'Separate qualitative triangulation'],
-      ['CSB comparative reviews', '24 curated narratives: 17 positive, 4 negative, 2 mixed, 1 neutral. Four on Harvard Square listings; one additionally mentions Harvard and Porter.', 'Qualitative service-practice examples across sources and locations'],
+      ['Compiled CSB review dataset', '24 curated narratives: 17 positive, 4 negative, 2 mixed, 1 neutral. Four on Harvard Square listings; one additionally mentions Harvard and Porter.', 'Qualitative service-practice examples across sources and locations'],
       ['HFCU video observations', 'Five weekdays; 104 minutes, 20 seconds', 'Manually counted entrances/exits and entrance/ATM circulation'],
       ['Interviews and conceptual layout', 'Staff/service observations, qualitative interviews and reconstructed first floor', 'Service-class differences and candidate bottlenecks'],
     ]} />
     <p>HFCU Yelp listing association does not establish an actual branch visit. CSB narratives span platforms, locations and digital banking and may not be original branch-specific postings. Their percentages cannot establish population failure rates or relative bank performance. Supplementary HFCU narratives remain separate.</p>
     <ResearchTable caption="Preliminary themes in 39 reviews rated 1-2 stars" headings={['Theme', 'Reviews', 'Share of 39']} rows={themes} />
+    <a className="section-inline-link" href={`${datasetBase}HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download HFCU reviews (CSV)</a>
     <p className="research-callout">Codes overlap and require manual audit. Digital mentions include ordinary technology references: 53.8% is not a digital failure rate. Waiting includes callbacks and other non-branch delays. Example wording from a matrix graphic is not a verbatim source quotation.</p>
     </div></details>
     <details><summary><span>Customer traffic<small>Five weekday recordings and arrival-rate calculations</small></span></summary><div className="methodology-detail-body">
@@ -86,7 +93,9 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     <details><summary><span>Branch layout and service flow<small>Interviews, customer routes and the conceptual floor plan</small></span></summary><div className="methodology-detail-body">
     <section className="research-section"><h3>Interviews, process map and floor plan</h3><p>The conceptual first floor has four teller stations and six officer offices, not verified concurrent staffing. Interviews suggest longer officer consultations, but service-time distributions, active-server counts, teller/officer arrival splits and average waits have not been reliably measured.</p><ol className="research-process">{['Arrival', 'Vestibule / ATM or reception', 'Teller or officer', 'Possible handoff / remote specialist', 'Resolution or follow-up', 'Exit'].map(step => <li key={step}>{step}</li>)}</ol><p>Overlay anonymous service routes on the conceptual plan. Test the narrow vestibule and ATM queue as a specific circulation constraint; the drawing is not a measured as-built plan.</p></section>
     </div></details>
-    <details><summary><span>Local comparison<small>Cambridge Savings Bank as a qualitative benchmark</small></span></summary><div className="methodology-detail-body">
+    <details><summary><span>CSB dataset and local comparison<small>24 compiled narratives across sources and locations</small></span></summary><div className="methodology-detail-body">
+    <p>The compiled Cambridge Savings Bank (CSB) dataset contains 24 curated review narratives: 17 positive, 4 negative, 2 mixed and 1 neutral. It supports qualitative comparison of service practices, not a ranking of bank performance or a representative customer survey.</p>
+    <div className="action-row"><a className="site-action secondary-site-action" href={`${datasetBase}CSB_Aggregated_Reviews_24.csv`} download>CSB reviews (CSV)</a><a className="site-action secondary-site-action" href={`${datasetBase}CSB_Review_Evidence_and_HFCU_Benchmark.xlsx`} download>Benchmark workbook (Excel)</a></div>
     <Benchmark />
     </div></details>
     <details><summary><span>Study limitations<small>What the evidence can and cannot establish</small></span></summary><div className="methodology-detail-body">
@@ -98,6 +107,13 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
 
   if (page === 'findings') return <section className="research-findings research-content">
     <div className="section-heading"><span className="page-label">Key findings</span><h2>Candidate bottlenecks and strength of evidence</h2><p>The strongest current diagnosis is fragmented service continuity plus potentially inefficient routing of short versus complex transactions.</p></div>
+    <figure className="failure-matrix-figure">
+      <a href={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} target="_blank" rel="noreferrer" aria-label="Open full-size HFCU failure matrix chart">
+        <img src={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} alt="HFCU failure matrix: digital-related mentions 21 of 39 low-rated reviews, documents 13, waiting 10, communication and staff behavior 8 each. Other coded themes and proposed operational responses are shown." />
+      </a>
+      <figcaption>Preliminary overlapping themes in 39 reviews rated 1-2 stars. Digital mentions are not necessarily failures; proposed responses are hypotheses, not observed effects.</figcaption>
+      <a className="section-inline-link" href={`${datasetBase}HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download source reviews (CSV)</a>
+    </figure>
     <div className="findings-grid">{findings.map(([confidence, title, evidence, interpretation]) => <article key={title}><span className="research-evidence-label">{confidence}</span><strong>{title}</strong><p>{evidence}</p><p>{interpretation}</p></article>)}</div>
     <p className="research-callout">ATM queueing in the entry vestibule is the most actionable architectural issue. The data do not establish broad understaffing or demonstrate that a wholesale renovation would improve outcomes.</p>
     <div className="findings-actions"><a className="site-action primary-site-action" href="#/traffic-methodology">View methodology</a><a className="site-action secondary-site-action" href="#/">Open recommendations</a><a className="site-action secondary-site-action" href="#/datasets">Open datasets</a></div>

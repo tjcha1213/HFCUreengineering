@@ -601,7 +601,7 @@ function App() {
             </article>
             <article>
               <strong>Datasets</strong>
-              <p>Structured CSV files for customer arrival counts and the evidence index behind the reengineering rationales.</p>
+              <p>Customer arrival counts, the compiled Cambridge Savings Bank review dataset, and the evidence index behind the reengineering rationales.</p>
               <a className="site-action secondary-site-action" href="#/datasets">Open datasets</a>
             </article>
           </div>
@@ -661,6 +661,26 @@ function App() {
               <strong>Rationale evidence index</strong>
               <p>Index connecting each major recommendation to the supporting evidence page, asset, or observation source.</p>
               <a className="site-action secondary-site-action" href={`${assetBase}datasets/rationale-evidence-index.csv`} target="_blank" rel="noreferrer">Open CSV</a>
+            </article>
+            <article>
+              <strong>Compiled CSB review dataset</strong>
+              <p>24 curated Cambridge Savings Bank narratives across sources and locations: 17 positive, 4 negative, 2 mixed and 1 neutral. Used as a qualitative service-practice benchmark, not a representative comparison of bank performance.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/CSB_Aggregated_Reviews_24.csv`} download>Download CSV</a>
+            </article>
+            <article>
+              <strong>HFCU Harvard Square review dataset</strong>
+              <p>87 written Yelp records with review text and preliminary theme codes. The failure matrix uses the 39 reviews rated 1-2 stars.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download CSV</a>
+            </article>
+            <article>
+              <strong>CSB evidence and HFCU benchmark workbook</strong>
+              <p>The compiled Excel workbook supporting the qualitative comparison of CSB and HFCU service practices.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/CSB_Review_Evidence_and_HFCU_Benchmark.xlsx`} download>Download Excel</a>
+            </article>
+            <article>
+              <strong>HFCU failure matrix</strong>
+              <p>Coded review themes, operational areas and potential responses. Categories overlap and proposed effects remain untested.</p>
+              <a className="site-action secondary-site-action" href={`${assetBase}datasets/HFCU_Failure_Matrix_Chart.png`} target="_blank" rel="noreferrer">Open chart</a>
             </article>
             <article>
               <strong>Video appendix</strong>
