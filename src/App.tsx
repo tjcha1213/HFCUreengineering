@@ -740,7 +740,7 @@ function App() {
             <p>Prioritize keeping ATM queues out of the entrance path. Lounge, seating and service-point changes are selective hypotheses to test after process pilots, not evidence that wholesale renovation is needed. This conceptual plan is not a measured as-built drawing.</p>
           </div>
 
-          <div className="map-layout">
+          <div className="architecture-workbench">
             <figure className="branch-floor-plan">
               <div className="floor-plan-stage">
                 <img
@@ -766,21 +766,6 @@ function App() {
               <figcaption>Conceptual customer-facing first floor plan for 104 Mount Auburn Street.</figcaption>
             </figure>
 
-            <div className="system-notes">
-              <div>
-                <strong>System goal</strong>
-                <p>Route status checks and readiness questions into the app before the member reaches staff.</p>
-              </div>
-              <div>
-                <strong>Branch bottleneck</strong>
-                <p>The current lounge is pushed toward the street-facing edge, which weakens mutual visibility between waiting members, tellers, and office staff.</p>
-              </div>
-              <div>
-                <strong>Reengineering move</strong>
-                <p>Recenter waiting activity so tellers and offices surround the lounge area, while ATM traffic is separated from the main entrance path.</p>
-              </div>
-            </div>
-          </div>
           <div className="architecture-recommendations">
             {architectureRecommendations.map((item) => (
               <button
@@ -791,9 +776,12 @@ function App() {
                 aria-pressed={activeArchitecture === item.id}
               >
                 <strong>{item.title}</strong>
-                <p>{item.body}</p>
               </button>
             ))}
+          </div>
+          <div className="architecture-selection" aria-live="polite">
+            {activeArchitectureRecommendation ? <p>{activeArchitectureRecommendation.body}</p> : <p>Conceptual layout proposals. ATM circulation is the first priority; furniture and visibility changes require testing.</p>}
+          </div>
           </div>
           {activeArchitecture === 'atm' && (
             <aside className="architecture-video-evidence" aria-label="ATM queue pressure video evidence">
