@@ -81,7 +81,7 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     ]} />
     <p>HFCU Yelp listing association does not establish an actual branch visit. CSB narratives span platforms, locations and digital banking and may not be original branch-specific postings. Their percentages cannot establish population failure rates or relative bank performance. Supplementary HFCU narratives remain separate.</p>
     <ResearchTable caption="Preliminary themes in 39 reviews rated 1-2 stars" headings={['Theme', 'Reviews', 'Share of 39']} rows={themes} />
-    <a className="section-inline-link" href={`${datasetBase}HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download HFCU reviews (CSV)</a>
+    <a className="section-inline-link" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open HFCU review spreadsheet</a>
     <p className="research-callout">Codes overlap and require manual audit. Digital mentions include ordinary technology references: 53.8% is not a digital failure rate. Waiting includes callbacks and other non-branch delays. Example wording from a matrix graphic is not a verbatim source quotation.</p>
     </div></details>
     <details><summary><span>Customer traffic<small>Five weekday recordings and arrival-rate calculations</small></span></summary><div className="methodology-detail-body">
@@ -95,7 +95,7 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
     </div></details>
     <details><summary><span>CSB dataset and local comparison<small>24 compiled narratives across sources and locations</small></span></summary><div className="methodology-detail-body">
     <p>The compiled Cambridge Savings Bank (CSB) dataset contains 24 curated review narratives: 17 positive, 4 negative, 2 mixed and 1 neutral. It supports qualitative comparison of service practices, not a ranking of bank performance or a representative customer survey.</p>
-    <div className="action-row"><a className="site-action secondary-site-action" href={`${datasetBase}CSB_Aggregated_Reviews_24.csv`} download>CSB reviews (CSV)</a><a className="site-action secondary-site-action" href={`${datasetBase}CSB_Review_Evidence_and_HFCU_Benchmark.xlsx`} download>Benchmark workbook (Excel)</a></div>
+    <div className="action-row"><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1EAtGJ8z-8EqnswEkvXZIJ1YP5ekj0BeYMGZWYottSww/edit?gid=172617412#gid=172617412" target="_blank" rel="noreferrer">Open CSB review spreadsheet</a><a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/199p_fUqUFBk9rx9svq5clJ4W1fF1aDhaon7udtYTKX4/edit?gid=532963172#gid=532963172" target="_blank" rel="noreferrer">CSB sources and supporting details</a></div>
     <Benchmark />
     </div></details>
     <details><summary><span>Study limitations<small>What the evidence can and cannot establish</small></span></summary><div className="methodology-detail-body">
@@ -112,7 +112,7 @@ export default function ResearchContent({ page }: { page: 'methodology' | 'findi
         <img src={`${datasetBase}HFCU_Failure_Matrix_Chart.png`} alt="HFCU failure matrix: digital-related mentions 21 of 39 low-rated reviews, documents 13, waiting 10, communication and staff behavior 8 each. Other coded themes and proposed operational responses are shown." />
       </a>
       <figcaption>Preliminary overlapping themes in 39 reviews rated 1-2 stars. Digital mentions are not necessarily failures; proposed responses are hypotheses, not observed effects.</figcaption>
-      <a className="section-inline-link" href={`${datasetBase}HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download source reviews (CSV)</a>
+      <a className="section-inline-link" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open source review spreadsheet</a>
     </figure>
     <div className="findings-grid">{findings.map(([confidence, title, evidence, interpretation]) => <article key={title}><span className="research-evidence-label">{confidence}</span><strong>{title}</strong><p>{evidence}</p><p>{interpretation}</p></article>)}</div>
     <p className="research-callout">ATM queueing in the entry vestibule is the most actionable architectural issue. The data do not establish broad understaffing or demonstrate that a wholesale renovation would improve outcomes.</p>

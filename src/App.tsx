@@ -665,17 +665,17 @@ function App() {
             <article>
               <strong>Compiled CSB review dataset</strong>
               <p>24 curated Cambridge Savings Bank narratives across sources and locations: 17 positive, 4 negative, 2 mixed and 1 neutral. Used as a qualitative service-practice benchmark, not a representative comparison of bank performance.</p>
-              <a className="site-action secondary-site-action" href={`${assetBase}datasets/CSB_Aggregated_Reviews_24.csv`} download>Download CSV</a>
+              <a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1EAtGJ8z-8EqnswEkvXZIJ1YP5ekj0BeYMGZWYottSww/edit?gid=172617412#gid=172617412" target="_blank" rel="noreferrer">Open spreadsheet</a>
             </article>
             <article>
               <strong>HFCU Harvard Square review dataset</strong>
               <p>87 written Yelp records with review text and preliminary theme codes. The failure matrix uses the 39 reviews rated 1-2 stars.</p>
-              <a className="site-action secondary-site-action" href={`${assetBase}datasets/HFCU_Harvard_Square_Yelp_Reviews_87.csv`} download>Download CSV</a>
+              <a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/1CEh8fO8i7jwSSzkZDVDSIsjSEaqUv90jyzBfEtoo20Y/edit?gid=1599124210#gid=1599124210" target="_blank" rel="noreferrer">Open spreadsheet</a>
             </article>
             <article>
-              <strong>CSB evidence and HFCU benchmark workbook</strong>
-              <p>The compiled Excel workbook supporting the qualitative comparison of CSB and HFCU service practices.</p>
-              <a className="site-action secondary-site-action" href={`${assetBase}datasets/CSB_Review_Evidence_and_HFCU_Benchmark.xlsx`} download>Download Excel</a>
+              <strong>CSB sources and supporting details</strong>
+              <p>Source information and supplementary details for the compiled CSB review dataset and qualitative service-practice comparison.</p>
+              <a className="site-action secondary-site-action" href="https://docs.google.com/spreadsheets/d/199p_fUqUFBk9rx9svq5clJ4W1fF1aDhaon7udtYTKX4/edit?gid=532963172#gid=532963172" target="_blank" rel="noreferrer">Open spreadsheet</a>
             </article>
             <article>
               <strong>HFCU failure matrix</strong>
